@@ -1,0 +1,22 @@
+{
+  "packageManager": "pnpm@10.8.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm --filter @screen-fit/core build && pnpm --filter @screen-fit/react build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.24.0",
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "esbuild": "^0.25.2",
+    "eslint": "^9.24.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "globals": "^16.0.0",
+    "rimraf": "^6.0.1",
+    "rollup": "^4.39.0",
+    "rollup-plugin-dts": "^6.2.1",
+    "rollup-plugin-esbuild": "^6.2.1",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.29.1"
+  }
+}

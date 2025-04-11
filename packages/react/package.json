@@ -1,0 +1,25 @@
+{
+  "name": "@screen-fit/react",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "module": "dist/index.js",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && rollup -c"
+  },
+  "dependencies": {
+    "@lit/react": "^1.0.7",
+    "@screen-fit/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^19.1.2"
+  },
+  "peerDependencies": {
+    "react": ">=17",
+    "react-dom": ">=17"
+  }
+}

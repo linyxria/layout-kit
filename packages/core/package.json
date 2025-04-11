@@ -1,0 +1,17 @@
+{
+  "name": "@screen-fit/core",
+  "version": "0.1.0",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "module": "dist/index.js",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && rollup -c"
+  },
+  "dependencies": {
+    "lit": "^3.2.1"
+  }
+}
