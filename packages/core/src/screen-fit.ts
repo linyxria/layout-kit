@@ -49,7 +49,7 @@ export class ScreenFit extends LitElement {
   attributeChangedCallback(
     name: string,
     _old: string | null,
-    value: string | null
+    value: string | null,
   ) {
     super.attributeChangedCallback(name, _old, value)
 
@@ -87,7 +87,7 @@ export class ScreenFit extends LitElement {
         detail: { scale: nextScale },
         bubbles: true,
         composed: true,
-      })
+      }),
     )
 
     // 计算偏移量
