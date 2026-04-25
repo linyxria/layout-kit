@@ -324,7 +324,10 @@ export class AmbientImage extends LitElement {
       ${this.variant === 'blur'
         ? html`
             <div class="backdrop" aria-hidden="true">
-              <img src=${this.src} crossorigin=${this.crossOrigin ?? undefined} />
+              <img
+                src=${this.src}
+                crossorigin=${this.crossOrigin ?? undefined}
+              />
             </div>
           `
         : null}
@@ -338,7 +341,10 @@ export class AmbientImage extends LitElement {
         />
         ${this.variant !== 'fade' || this.fade === 'none'
           ? null
-          : html`<span class=${`fade ${this.fade}`} style=${styleMap(styles)}></span>`}
+          : html`<span
+              class=${`fade ${this.fade}`}
+              style=${styleMap(styles)}
+            ></span>`}
       </div>
     `
   }
