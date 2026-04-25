@@ -1,4 +1,5 @@
 import {
+  AmbientImage as AmbientImageElement,
   AutoGrid as AutoGridElement,
   MasonryLayout as MasonryLayoutElement,
   ResizablePanel as ResizablePanelElement,
@@ -7,6 +8,15 @@ import {
 } from '@layout-kit/core'
 import { createComponent } from '@lit/react'
 import React from 'react'
+
+export const AmbientImage = createComponent({
+  tagName: 'ambient-image',
+  elementClass: AmbientImageElement,
+  react: React,
+  events: {
+    onAmbient: 'ambient',
+  },
+})
 
 export const ScreenFit = createComponent({
   tagName: 'screen-fit',

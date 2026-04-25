@@ -233,6 +233,7 @@ a {
 }
 
 auto-grid,
+ambient-image,
 screen-fit,
 masonry-layout,
 virtual-list,
@@ -244,6 +245,12 @@ auto-grid:not(:defined) {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 152px), 1fr));
   gap: 12px;
+}
+
+ambient-image:not(:defined) {
+  display: block;
+  min-height: 150px;
+  background: #18313c;
 }
 
 masonry-layout:not(:defined) {
@@ -355,6 +362,11 @@ resizable-panel:not(:defined) [slot='end'] {
 
 .masonry-demo {
   min-height: 250px;
+}
+
+.ambient-demo {
+  min-height: 190px;
+  border-radius: 8px;
 }
 
 .fit-demo {

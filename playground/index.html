@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Layout Kit Playground</title>
+    <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
     <main class="shell">
@@ -17,8 +18,6 @@
         </a>
         <nav class="menu">
           <a href="#core">Core</a>
-          <a href="#react">React</a>
-          <a href="#vue">Vue</a>
         </nav>
       </aside>
 
@@ -30,12 +29,12 @@
           </div>
           <dl class="stats" aria-label="playground 统计">
             <div>
-              <dt>5</dt>
+              <dt>6</dt>
               <dd>个布局组件</dd>
             </div>
             <div>
-              <dt>3</dt>
-              <dd>种接入方式</dd>
+              <dt>dist</dt>
+              <dd>使用构建产物</dd>
             </div>
           </dl>
         </header>
@@ -139,6 +138,20 @@
 
             <div class="component-demo">
               <div class="demo-label">
+                <span>ambient-image</span>
+                <strong>图片边缘自然融进背景</strong>
+              </div>
+              <ambient-image
+                src="./img.webp"
+                alt="抽象界面横幅"
+                variant="blur"
+                image-radius="14px"
+                class="ambient-demo"
+              ></ambient-image>
+            </div>
+
+            <div class="component-demo">
+              <div class="demo-label">
                 <span>screen-fit</span>
                 <strong>把设计稿缩进父容器里</strong>
               </div>
@@ -151,24 +164,8 @@
             </div>
           </div>
         </section>
-
-        <section id="react" class="demo-section">
-          <div class="section-heading">
-            <p class="eyebrow">React</p>
-            <h2>用 React 写法调用</h2>
-          </div>
-          <div id="react-root"></div>
-        </section>
-
-        <section id="vue" class="demo-section">
-          <div class="section-heading">
-            <p class="eyebrow">Vue</p>
-            <h2>用 Vue 写法调用</h2>
-          </div>
-          <div id="vue-root"></div>
-        </section>
       </div>
     </main>
-    <script type="module" src="/src/main.ts"></script>
+    <script src="../packages/core/dist/index.iife.js"></script>
   </body>
 </html>

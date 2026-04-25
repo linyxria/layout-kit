@@ -15,7 +15,7 @@ pnpm install
 pnpm dev
 ```
 
-打开 `http://127.0.0.1:5173/` 查看 playground。
+然后直接打开 `playground/index.html` 查看 playground。这个页面会引用 `packages/core/dist/index.iife.js`，也就是构建后的 core 产物。
 
 构建包：
 
@@ -95,6 +95,41 @@ document.querySelector('auto-grid')?.addEventListener('grid', (event) => {
 </resizable-panel>
 ```
 
+### AmbientImage
+
+让图片居中展示，并基于同一张图生成氛围背景。默认 `variant="blur"` 会把图片放大、模糊并铺在容器背后，适合照片、封面、海报预览这类场景。
+
+```html
+<ambient-image
+  src="/banner.png"
+  alt="活动横幅"
+  image-radius="12px"
+  background-color="#15110f"
+></ambient-image>
+```
+
+如果需要之前那种横幅左右融边效果，可以切到 `variant="fade"`：
+
+```html
+<ambient-image
+  src="/banner.png"
+  alt="活动横幅"
+  variant="fade"
+  fade="x"
+  fade-size="14%"
+></ambient-image>
+```
+
+组件也会自动计算图片平均色，作为背景兜底色；如果图片跨域且没有正确的 CORS 响应，可以关闭自动取色并手动传入颜色：
+
+```html
+<ambient-image
+  src="https://example.com/banner.png"
+  background-color="#15110f"
+  auto-color="false"
+></ambient-image>
+```
+
 ### ScreenFit
 
 把一个设计稿尺寸的页面按父容器等比缩放居中，常用于大屏页面、预览卡片、弹窗或 iframe 里的画布。
@@ -118,7 +153,12 @@ document.querySelector('auto-grid')?.addEventListener('grid', (event) => {
 ## React 用法
 
 ```tsx
-import { AutoGrid, ResizablePanel, VirtualList } from '@layout-kit/react'
+import {
+  AmbientImage,
+  AutoGrid,
+  ResizablePanel,
+  VirtualList,
+} from '@layout-kit/react'
 
 export function Demo() {
   const rows = Array.from({ length: 1000 }, (_, index) => `条目 ${index + 1}`)
@@ -136,6 +176,8 @@ export function Demo() {
         ))}
       </VirtualList>
 
+      <AmbientImage src="/banner.png" alt="活动横幅" />
+
       <ResizablePanel size={40} min={20} max={80}>
         <section slot="start">左侧</section>
         <section slot="end">右侧</section>
@@ -149,7 +191,12 @@ export function Demo() {
 
 ```vue
 <script setup lang="ts">
-import { AutoGrid, ResizablePanel, VirtualList } from '@layout-kit/vue'
+import {
+  AmbientImage,
+  AutoGrid,
+  ResizablePanel,
+  VirtualList,
+} from '@layout-kit/vue'
 
 const rows = Array.from({ length: 1000 }, (_, index) => `条目 ${index + 1}`)
 </script>
@@ -163,6 +210,8 @@ const rows = Array.from({ length: 1000 }, (_, index) => `条目 ${index + 1}`)
   <VirtualList :height="320" :item-height="48">
     <article v-for="row in rows" :key="row">{{ row }}</article>
   </VirtualList>
+
+  <AmbientImage src="/banner.png" alt="活动横幅" />
 
   <ResizablePanel :size="40" :min="20" :max="80">
     <section slot="start">左侧</section>
@@ -180,5 +229,6 @@ const rows = Array.from({ length: 1000 }, (_, index) => `条目 ${index + 1}`)
 - `virtual-list`：`range`，返回 `{ start, end }`。
 - `resizable-panel`：`resize`，返回 `{ size }`。
 - `screen-fit`：`scale`，返回 `{ scale, inlineSize, blockSize }`。
+- `ambient-image`：`ambient`，返回 `{ color, inlineSize, blockSize }`。
 
-React 包装层使用 `onGrid`、`onLayout`、`onRange`、`onResize`、`onScale`。Vue 包装层同样暴露对应的事件回调 prop。
+React 包装层使用 `onAmbient`、`onGrid`、`onLayout`、`onRange`、`onResize`、`onScale`。Vue 包装层同样暴露对应的事件回调 prop。

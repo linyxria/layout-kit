@@ -1,3 +1,4 @@
+export { AmbientImage, type AmbientImageEventData } from './ambient-image'
 export { AutoGrid, type AutoGridEventData } from './auto-grid'
 export { MasonryLayout, type MasonryLayoutEventData } from './masonry-layout'
 export { ResizablePanel, type ResizablePanelEventData } from './resizable-panel'

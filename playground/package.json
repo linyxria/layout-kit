@@ -3,24 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "vite build",
-    "dev": "vite --host 127.0.0.1",
-    "preview": "vite preview --host 127.0.0.1"
-  },
-  "dependencies": {
-    "@layout-kit/core": "workspace:*",
-    "@layout-kit/react": "workspace:*",
-    "@layout-kit/vue": "workspace:*",
-    "@vitejs/plugin-react": "^5.1.0",
-    "@vitejs/plugin-vue": "^6.0.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "vite": "^7.3.0",
-    "vue": "^3.5.0"
-  },
-  "devDependencies": {
-    "@types/node": "^25.6.0",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.3"
+    "build": "pnpm --filter @layout-kit/core build",
+    "dev": "pnpm build"
   }
 }
