@@ -1,5 +1,11 @@
+import {
+  AutoGrid as AutoGridElement,
+  MasonryLayout as MasonryLayoutElement,
+  ResizablePanel as ResizablePanelElement,
+  ScreenFit as ScreenFitElement,
+  VirtualList as VirtualListElement,
+} from '@layout-kit/core'
 import { createComponent } from '@lit/react'
-import { ScreenFit as ScreenFitElement } from '@screen-fit/core'
 import React from 'react'
 
 export const ScreenFit = createComponent({
@@ -7,6 +13,42 @@ export const ScreenFit = createComponent({
   elementClass: ScreenFitElement,
   react: React,
   events: {
-    onscale: 'scale',
+    onScale: 'scale',
+  },
+})
+
+export const MasonryLayout = createComponent({
+  tagName: 'masonry-layout',
+  elementClass: MasonryLayoutElement,
+  react: React,
+  events: {
+    onLayout: 'layout',
+  },
+})
+
+export const AutoGrid = createComponent({
+  tagName: 'auto-grid',
+  elementClass: AutoGridElement,
+  react: React,
+  events: {
+    onGrid: 'grid',
+  },
+})
+
+export const VirtualList = createComponent({
+  tagName: 'virtual-list',
+  elementClass: VirtualListElement,
+  react: React,
+  events: {
+    onRange: 'range',
+  },
+})
+
+export const ResizablePanel = createComponent({
+  tagName: 'resizable-panel',
+  elementClass: ResizablePanelElement,
+  react: React,
+  events: {
+    onResize: 'resize',
   },
 })

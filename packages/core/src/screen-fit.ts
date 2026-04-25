@@ -1,9 +1,9 @@
 import { css, html, LitElement } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 
-import { debounce } from './util'
-
 export interface ScaleEventData {
+  blockSize: number
+  inlineSize: number
   scale: number
 }
 
@@ -11,99 +11,124 @@ export interface ScaleEventData {
 export class ScreenFit extends LitElement {
   static styles = css`
     :host {
-      position: fixed;
-      inset: 0;
       display: block;
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      contain: layout paint;
+      box-sizing: border-box;
+    }
+
+    .viewport {
       width: var(--sf-width);
       height: var(--sf-height);
-      transform: translate(var(--sf-translate-x), var(--sf-translate-y))
-        scale(var(--sf-scale));
+      transform: translate(
+          var(--sf-translate-x, 0px),
+          var(--sf-translate-y, 0px)
+        )
+        scale(var(--sf-scale, 1));
       transform-origin: top left;
       transition: transform 0.3s;
+    }
+
+    ::slotted(*) {
+      box-sizing: border-box;
     }
   `
 
   @property({ type: Number, attribute: 'draft-width' })
-  width = 0
+  draftWidth = 0
 
   @property({ type: Number, attribute: 'draft-height' })
-  height = 0
+  draftHeight = 0
 
-  private currentScale = 1
+  @property()
+  fit: 'contain' | 'cover' = 'contain'
+
+  private currentScale = Number.NaN
+  private hasWarnedInvalidSize = false
+  private frameId = 0
+  private resizeObserver = new ResizeObserver(() => this.scheduleTransform())
 
   connectedCallback() {
     super.connectedCallback()
-
-    if (!this.width || !this.height) {
-      console.warn('screen-fit must have a width and height')
-      return
-    }
-
-    this.style.setProperty('--sf-width', `${this.width}px`)
-    this.style.setProperty('--sf-height', `${this.height}px`)
-
-    this.updateTransform()
-    window.addEventListener('resize', this.updateTransform)
+    this.resizeObserver.observe(this)
+    this.updateSizeProperties()
+    this.scheduleTransform()
   }
 
-  attributeChangedCallback(
-    name: string,
-    _old: string | null,
-    value: string | null,
-  ) {
-    super.attributeChangedCallback(name, _old, value)
-
-    if (name === 'draft-width') {
-      this.style.setProperty('--sf-width', `${value}px`)
-      this.updateTransform()
-    } else if (name === 'draft-height') {
-      this.style.setProperty('--sf-height', `${value}px`)
-      this.updateTransform()
+  protected updated(changedProperties: Map<string, unknown>) {
+    if (
+      changedProperties.has('draftWidth') ||
+      changedProperties.has('draftHeight') ||
+      changedProperties.has('fit')
+    ) {
+      this.updateSizeProperties()
+      this.scheduleTransform()
     }
   }
 
   disconnectedCallback() {
     super.disconnectedCallback()
-    window.removeEventListener('resize', this.updateTransform)
+    cancelAnimationFrame(this.frameId)
+    this.resizeObserver.disconnect()
   }
 
-  private updateTransform = debounce(() => {
-    // 获取当前窗口的宽高
-    const inlineSize = window.innerWidth
-    const blockSize = window.innerHeight
+  private updateSizeProperties() {
+    this.style.setProperty('--sf-width', `${this.draftWidth}px`)
+    this.style.setProperty('--sf-height', `${this.draftHeight}px`)
+  }
 
-    // 计算缩放比例
-    const scaleX = inlineSize / this.width
-    const scaleY = blockSize / this.height
-    const nextScale = Math.min(scaleX, scaleY)
+  private scheduleTransform() {
+    cancelAnimationFrame(this.frameId)
+    this.frameId = requestAnimationFrame(() => this.updateTransform())
+  }
 
-    // 如果缩放比例没有变化，则不更新
-    if (nextScale === this.currentScale) {
+  private updateTransform() {
+    const inlineSize = this.clientWidth
+    const blockSize = this.clientHeight
+
+    if (!this.draftWidth || !this.draftHeight || !inlineSize || !blockSize) {
+      if (!this.hasWarnedInvalidSize) {
+        console.warn(
+          'screen-fit must have draft-width, draft-height, and a visible container size',
+        )
+        this.hasWarnedInvalidSize = true
+      }
+
       return
     }
 
-    this.dispatchEvent(
-      new CustomEvent<ScaleEventData>('scale', {
-        detail: { scale: nextScale },
-        bubbles: true,
-        composed: true,
-      }),
-    )
+    const scaleX = inlineSize / this.draftWidth
+    const scaleY = blockSize / this.draftHeight
+    const nextScale =
+      this.fit === 'cover' ? Math.max(scaleX, scaleY) : Math.min(scaleX, scaleY)
 
-    // 计算偏移量
-    const translateX = (inlineSize - this.width * nextScale) / 2
-    const translateY = (blockSize - this.height * nextScale) / 2
+    const translateX = (inlineSize - this.draftWidth * nextScale) / 2
+    const translateY = (blockSize - this.draftHeight * nextScale) / 2
 
-    // 更新样式
     this.style.setProperty('--sf-scale', `${nextScale}`)
     this.style.setProperty('--sf-translate-x', `${translateX}px`)
     this.style.setProperty('--sf-translate-y', `${translateY}px`)
 
-    // 更新缩放比例
+    if (nextScale === this.currentScale) {
+      return
+    }
+
     this.currentScale = nextScale
-  }, 300)
+    this.dispatchEvent(
+      new CustomEvent<ScaleEventData>('scale', {
+        detail: { blockSize, inlineSize, scale: nextScale },
+        bubbles: true,
+        composed: true,
+      }),
+    )
+  }
 
   render() {
-    return html`<slot></slot>`
+    return html`<div class="viewport"><slot></slot></div>`
   }
 }

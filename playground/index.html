@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Layout Kit Playground</title>
+  </head>
+  <body>
+    <main class="shell">
+      <aside class="sidebar" aria-label="playground 分区">
+        <a class="brand" href="#overview" aria-label="Layout Kit Playground">
+          <span class="brand-mark">LK</span>
+          <span>
+            <strong>Layout Kit</strong>
+            <small>Playground</small>
+          </span>
+        </a>
+        <nav class="menu">
+          <a href="#core">Core</a>
+          <a href="#react">React</a>
+          <a href="#vue">Vue</a>
+        </nav>
+      </aside>
+
+      <div class="workspace">
+        <header id="overview" class="hero">
+          <div>
+            <p class="eyebrow">Layout Kit Playground</p>
+            <h1>响应式布局组件</h1>
+          </div>
+          <dl class="stats" aria-label="playground 统计">
+            <div>
+              <dt>5</dt>
+              <dd>个布局组件</dd>
+            </div>
+            <div>
+              <dt>3</dt>
+              <dd>种接入方式</dd>
+            </div>
+          </dl>
+        </header>
+
+        <section id="core" class="demo-section">
+          <div class="section-heading">
+            <p class="eyebrow">Core</p>
+            <h2>直接使用标签</h2>
+          </div>
+          <div class="core-demos">
+            <div class="component-demo">
+              <div class="demo-label">
+                <span>auto-grid</span>
+                <strong>容器变宽时自动多排几列</strong>
+              </div>
+              <auto-grid column-width="152" gap="12">
+                <article class="tile accent-green">
+                  <span>卡片 A</span>
+                  <strong>宽度够就并排</strong>
+                </article>
+                <article class="tile accent-blue">
+                  <span>卡片 B</span>
+                  <strong>空间小就换行</strong>
+                </article>
+                <article class="tile accent-rose">
+                  <span>卡片 C</span>
+                  <strong>间距保持一致</strong>
+                </article>
+              </auto-grid>
+            </div>
+
+            <div class="component-demo">
+              <div class="demo-label">
+                <span>masonry-layout</span>
+                <strong>不等高卡片也能贴紧排列</strong>
+              </div>
+              <masonry-layout column-width="150" gap="12">
+                <article class="masonry-card tall">这张卡片比较高</article>
+                <article class="masonry-card medium">
+                  内容多一点，高度也多一点。
+                </article>
+                <article class="masonry-card short">短内容</article>
+                <article class="masonry-card medium">
+                  下一张会放到更短的列里。
+                </article>
+                <article class="masonry-card tall">
+                  调整窗口宽度可以看到它重新排布。
+                </article>
+              </masonry-layout>
+            </div>
+
+            <div class="component-demo">
+              <div class="demo-label">
+                <span>virtual-list</span>
+                <strong>长列表只处理当前看得到的区域</strong>
+              </div>
+              <virtual-list height="192" item-height="44" class="list-demo">
+                <article class="list-row">
+                  <span>第 0001 行</span>
+                  <small>当前渲染</small>
+                </article>
+                <article class="list-row">
+                  <span>第 0002 行</span>
+                  <small>当前渲染</small>
+                </article>
+                <article class="list-row">
+                  <span>第 0003 行</span>
+                  <small>当前渲染</small>
+                </article>
+                <article class="list-row">
+                  <span>第 0004 行</span>
+                  <small>当前渲染</small>
+                </article>
+                <article class="list-row">
+                  <span>第 0005 行</span>
+                  <small>当前渲染</small>
+                </article>
+                <article class="list-row">
+                  <span>第 0006 行</span>
+                  <small>当前渲染</small>
+                </article>
+              </virtual-list>
+            </div>
+
+            <div class="component-demo">
+              <div class="demo-label">
+                <span>resizable-panel</span>
+                <strong>拖动中间分隔条改变比例</strong>
+              </div>
+              <resizable-panel size="46" min="28" max="72" class="panel">
+                <div slot="start" class="panel-pane">
+                  <span>左侧区域</span>
+                  <strong>放列表或导航</strong>
+                </div>
+                <div slot="end" class="panel-pane">
+                  <span>右侧区域</span>
+                  <strong>放详情或预览</strong>
+                </div>
+              </resizable-panel>
+            </div>
+
+            <div class="component-demo">
+              <div class="demo-label">
+                <span>screen-fit</span>
+                <strong>把设计稿缩进父容器里</strong>
+              </div>
+              <screen-fit draft-width="640" draft-height="360" class="fit-demo">
+                <article class="fit-canvas">
+                  <span>640 x 360</span>
+                  <strong>按父容器缩放</strong>
+                </article>
+              </screen-fit>
+            </div>
+          </div>
+        </section>
+
+        <section id="react" class="demo-section">
+          <div class="section-heading">
+            <p class="eyebrow">React</p>
+            <h2>用 React 写法调用</h2>
+          </div>
+          <div id="react-root"></div>
+        </section>
+
+        <section id="vue" class="demo-section">
+          <div class="section-heading">
+            <p class="eyebrow">Vue</p>
+            <h2>用 Vue 写法调用</h2>
+          </div>
+          <div id="vue-root"></div>
+        </section>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
