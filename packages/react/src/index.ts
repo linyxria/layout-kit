@@ -5,60 +5,60 @@ import {
   ResizablePanel as ResizablePanelElement,
   ScreenFit as ScreenFitElement,
   VirtualList as VirtualListElement,
-} from '@layout-kit/core'
-import { createComponent } from '@lit/react'
-import React from 'react'
+} from "@layout-kit/core"
+import { createComponent } from "@lit/react"
+import React from "react"
 
 export const AmbientImage = createComponent({
-  tagName: 'ambient-image',
+  tagName: "ambient-image",
   elementClass: AmbientImageElement,
   react: React,
   events: {
-    onAmbient: 'ambient',
+    onAmbient: "ambient",
   },
 })
 
 export const ScreenFit = createComponent({
-  tagName: 'screen-fit',
+  tagName: "screen-fit",
   elementClass: ScreenFitElement,
   react: React,
   events: {
-    onScale: 'scale',
+    onScale: "scale",
   },
 })
 
 export const MasonryLayout = createComponent({
-  tagName: 'masonry-layout',
+  tagName: "masonry-layout",
   elementClass: MasonryLayoutElement,
   react: React,
   events: {
-    onLayout: 'layout',
+    onLayout: "layout",
   },
 })
 
 export const AutoGrid = createComponent({
-  tagName: 'auto-grid',
+  tagName: "auto-grid",
   elementClass: AutoGridElement,
   react: React,
   events: {
-    onGrid: 'grid',
+    onGrid: "grid",
   },
 })
 
 export const VirtualList = createComponent({
-  tagName: 'virtual-list',
+  tagName: "virtual-list",
   elementClass: VirtualListElement,
   react: React,
   events: {
-    onRange: 'range',
+    onRange: "range",
   },
 })
 
 export const ResizablePanel = createComponent({
-  tagName: 'resizable-panel',
+  tagName: "resizable-panel",
   elementClass: ResizablePanelElement,
   react: React,
   events: {
-    onResize: 'resize',
+    onResize: "resize",
   },
 })

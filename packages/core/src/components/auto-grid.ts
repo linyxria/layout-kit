@@ -1,11 +1,11 @@
-import { css, html, LitElement } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { css, html, LitElement } from "lit"
+import { customElement, property } from "lit/decorators.js"
 
 export interface AutoGridEventData {
   columns: number
 }
 
-@customElement('auto-grid')
+@customElement("auto-grid")
 export class AutoGrid extends LitElement {
   static styles = css`
     :host {
@@ -29,7 +29,7 @@ export class AutoGrid extends LitElement {
     }
   `
 
-  @property({ type: Number, attribute: 'column-width' })
+  @property({ type: Number, attribute: "column-width" })
   columnWidth = 240
 
   @property({ type: Number })
@@ -54,7 +54,7 @@ export class AutoGrid extends LitElement {
   }
 
   protected updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('columnWidth') || changedProperties.has('gap')) {
+    if (changedProperties.has("columnWidth") || changedProperties.has("gap")) {
       this.updateGridProperties()
       this.updateColumns()
     }
@@ -62,10 +62,10 @@ export class AutoGrid extends LitElement {
 
   private updateGridProperties() {
     this.style.setProperty(
-      '--ag-column-width',
+      "--ag-column-width",
       `${Math.max(1, this.columnWidth)}px`,
     )
-    this.style.setProperty('--ag-gap', `${Math.max(0, this.gap)}px`)
+    this.style.setProperty("--ag-gap", `${Math.max(0, this.gap)}px`)
   }
 
   private updateColumns() {
@@ -88,7 +88,7 @@ export class AutoGrid extends LitElement {
 
     this.columns = columns
     this.dispatchEvent(
-      new CustomEvent<AutoGridEventData>('grid', {
+      new CustomEvent<AutoGridEventData>("grid", {
         detail: { columns },
         bubbles: true,
         composed: true,

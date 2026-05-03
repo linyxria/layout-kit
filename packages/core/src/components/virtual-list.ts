@@ -1,12 +1,12 @@
-import { css, html, LitElement } from 'lit'
-import { customElement, property, query } from 'lit/decorators.js'
+import { css, html, LitElement } from "lit"
+import { customElement, property, query } from "lit/decorators.js"
 
 export interface VirtualListRangeEventData {
   end: number
   start: number
 }
 
-@customElement('virtual-list')
+@customElement("virtual-list")
 export class VirtualList extends LitElement {
   static styles = css`
     :host {
@@ -37,7 +37,7 @@ export class VirtualList extends LitElement {
     }
   `
 
-  @property({ type: Number, attribute: 'item-height' })
+  @property({ type: Number, attribute: "item-height" })
   itemHeight = 48
 
   @property({ type: Number })
@@ -46,7 +46,7 @@ export class VirtualList extends LitElement {
   @property({ type: Number })
   overscan = 4
 
-  @query('slot')
+  @query("slot")
   private slotElement!: HTMLSlotElement
 
   private range: VirtualListRangeEventData = { start: -1, end: -1 }
@@ -55,14 +55,14 @@ export class VirtualList extends LitElement {
 
   connectedCallback() {
     super.connectedCallback()
-    this.addEventListener('scroll', this.handleScroll)
+    this.addEventListener("scroll", this.handleScroll)
     this.resizeObserver.observe(this)
   }
 
   disconnectedCallback() {
     super.disconnectedCallback()
     cancelAnimationFrame(this.frameId)
-    this.removeEventListener('scroll', this.handleScroll)
+    this.removeEventListener("scroll", this.handleScroll)
     this.resizeObserver.disconnect()
   }
 
@@ -73,9 +73,9 @@ export class VirtualList extends LitElement {
 
   protected updated(changedProperties: Map<string, unknown>) {
     if (
-      changedProperties.has('height') ||
-      changedProperties.has('itemHeight') ||
-      changedProperties.has('overscan')
+      changedProperties.has("height") ||
+      changedProperties.has("itemHeight") ||
+      changedProperties.has("overscan")
     ) {
       this.updateListProperties()
       this.scheduleLayout()
@@ -89,9 +89,9 @@ export class VirtualList extends LitElement {
   }
 
   private updateListProperties() {
-    this.style.setProperty('--vl-height', `${Math.max(1, this.height)}px`)
+    this.style.setProperty("--vl-height", `${Math.max(1, this.height)}px`)
     this.style.setProperty(
-      '--vl-item-height',
+      "--vl-item-height",
       `${Math.max(1, this.itemHeight)}px`,
     )
   }
@@ -107,7 +107,7 @@ export class VirtualList extends LitElement {
     const safeOverscan = Math.max(0, this.overscan)
 
     if (items.length === 0) {
-      this.style.setProperty('--vl-total-height', '0px')
+      this.style.setProperty("--vl-total-height", "0px")
       this.updateRange({ start: -1, end: -1 })
       return
     }
@@ -123,7 +123,7 @@ export class VirtualList extends LitElement {
     )
 
     this.style.setProperty(
-      '--vl-total-height',
+      "--vl-total-height",
       `${items.length * safeItemHeight}px`,
     )
 
@@ -146,7 +146,7 @@ export class VirtualList extends LitElement {
 
     this.range = range
     this.dispatchEvent(
-      new CustomEvent<VirtualListRangeEventData>('range', {
+      new CustomEvent<VirtualListRangeEventData>("range", {
         detail: this.range,
         bubbles: true,
         composed: true,

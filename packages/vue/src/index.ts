@@ -1,4 +1,4 @@
-import '@layout-kit/core'
+import "@layout-kit/core"
 
 import type {
   AmbientImageEventData,
@@ -7,18 +7,18 @@ import type {
   ResizablePanelEventData,
   ScaleEventData,
   VirtualListRangeEventData,
-} from '@layout-kit/core'
-import type { PropType } from 'vue'
-import { defineComponent, h } from 'vue'
+} from "@layout-kit/core"
+import type { PropType } from "vue"
+import { defineComponent, h } from "vue"
 
 export const AmbientImage = defineComponent({
-  name: 'AmbientImage',
+  name: "AmbientImage",
   props: {
     src: String,
     alt: String,
-    fit: String as PropType<'contain' | 'cover'>,
-    variant: String as PropType<'blur' | 'fade'>,
-    fade: String as PropType<'x' | 'y' | 'both' | 'none'>,
+    fit: String as PropType<"contain" | "cover">,
+    variant: String as PropType<"blur" | "fade">,
+    fade: String as PropType<"x" | "y" | "both" | "none">,
     fadeSize: String,
     blur: String,
     imageRadius: String,
@@ -27,50 +27,50 @@ export const AmbientImage = defineComponent({
     backdropScale: String,
     backgroundColor: String,
     autoColor: Boolean,
-    crossOrigin: String as PropType<'' | 'anonymous' | 'use-credentials'>,
+    crossOrigin: String as PropType<"" | "anonymous" | "use-credentials">,
     onAmbient: Function as PropType<
       (event: CustomEvent<AmbientImageEventData>) => void
     >,
   },
   setup(props, { attrs }) {
     return () =>
-      h('ambient-image', {
+      h("ambient-image", {
         ...attrs,
         src: props.src,
         alt: props.alt,
         fit: props.fit,
         variant: props.variant,
         fade: props.fade,
-        'fade-size': props.fadeSize,
+        "fade-size": props.fadeSize,
         blur: props.blur,
-        'image-radius': props.imageRadius,
-        'overlay-color': props.overlayColor,
+        "image-radius": props.imageRadius,
+        "overlay-color": props.overlayColor,
         padding: props.padding,
-        'backdrop-scale': props.backdropScale,
-        'background-color': props.backgroundColor,
-        'auto-color': props.autoColor,
-        'cross-origin': props.crossOrigin,
+        "backdrop-scale": props.backdropScale,
+        "background-color": props.backgroundColor,
+        "auto-color": props.autoColor,
+        "cross-origin": props.crossOrigin,
         onAmbient: props.onAmbient,
       })
   },
 })
 
 export const ScreenFit = defineComponent({
-  name: 'ScreenFit',
+  name: "ScreenFit",
   props: {
     draftWidth: Number,
     draftHeight: Number,
-    fit: String as PropType<'contain' | 'cover'>,
+    fit: String as PropType<"contain" | "cover">,
     onScale: Function as PropType<(event: CustomEvent<ScaleEventData>) => void>,
   },
   setup(props, { attrs, slots }) {
     return () =>
       h(
-        'screen-fit',
+        "screen-fit",
         {
           ...attrs,
-          'draft-width': props.draftWidth,
-          'draft-height': props.draftHeight,
+          "draft-width": props.draftWidth,
+          "draft-height": props.draftHeight,
           fit: props.fit,
           onScale: props.onScale,
         },
@@ -80,7 +80,7 @@ export const ScreenFit = defineComponent({
 })
 
 export const MasonryLayout = defineComponent({
-  name: 'MasonryLayout',
+  name: "MasonryLayout",
   props: {
     columnWidth: Number,
     gap: Number,
@@ -91,10 +91,10 @@ export const MasonryLayout = defineComponent({
   setup(props, { attrs, slots }) {
     return () =>
       h(
-        'masonry-layout',
+        "masonry-layout",
         {
           ...attrs,
-          'column-width': props.columnWidth,
+          "column-width": props.columnWidth,
           gap: props.gap,
           onLayout: props.onLayout,
         },
@@ -104,7 +104,7 @@ export const MasonryLayout = defineComponent({
 })
 
 export const AutoGrid = defineComponent({
-  name: 'AutoGrid',
+  name: "AutoGrid",
   props: {
     columnWidth: Number,
     gap: Number,
@@ -115,10 +115,10 @@ export const AutoGrid = defineComponent({
   setup(props, { attrs, slots }) {
     return () =>
       h(
-        'auto-grid',
+        "auto-grid",
         {
           ...attrs,
-          'column-width': props.columnWidth,
+          "column-width": props.columnWidth,
           gap: props.gap,
           onGrid: props.onGrid,
         },
@@ -128,7 +128,7 @@ export const AutoGrid = defineComponent({
 })
 
 export const VirtualList = defineComponent({
-  name: 'VirtualList',
+  name: "VirtualList",
   props: {
     itemHeight: Number,
     height: Number,
@@ -140,10 +140,10 @@ export const VirtualList = defineComponent({
   setup(props, { attrs, slots }) {
     return () =>
       h(
-        'virtual-list',
+        "virtual-list",
         {
           ...attrs,
-          'item-height': props.itemHeight,
+          "item-height": props.itemHeight,
           height: props.height,
           overscan: props.overscan,
           onRange: props.onRange,
@@ -154,9 +154,9 @@ export const VirtualList = defineComponent({
 })
 
 export const ResizablePanel = defineComponent({
-  name: 'ResizablePanel',
+  name: "ResizablePanel",
   props: {
-    direction: String as PropType<'horizontal' | 'vertical'>,
+    direction: String as PropType<"horizontal" | "vertical">,
     size: Number,
     min: Number,
     max: Number,
@@ -167,7 +167,7 @@ export const ResizablePanel = defineComponent({
   setup(props, { attrs, slots }) {
     return () =>
       h(
-        'resizable-panel',
+        "resizable-panel",
         {
           ...attrs,
           direction: props.direction,

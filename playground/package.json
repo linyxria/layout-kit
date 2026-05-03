@@ -1,9 +1,0 @@
-{
-  "name": "@layout-kit/playground",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "pnpm --filter @layout-kit/core build",
-    "dev": "pnpm build"
-  }
-}

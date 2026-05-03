@@ -1,11 +1,11 @@
-import { css, html, LitElement } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { css, html, LitElement } from "lit"
+import { customElement, property } from "lit/decorators.js"
 
 export interface ResizablePanelEventData {
   size: number
 }
 
-@customElement('resizable-panel')
+@customElement("resizable-panel")
 export class ResizablePanel extends LitElement {
   static styles = css`
     :host {
@@ -18,7 +18,7 @@ export class ResizablePanel extends LitElement {
       box-sizing: border-box;
     }
 
-    :host([direction='vertical']) {
+    :host([direction="vertical"]) {
       flex-direction: column;
     }
 
@@ -44,7 +44,7 @@ export class ResizablePanel extends LitElement {
       touch-action: none;
     }
 
-    :host([direction='vertical']) .handle {
+    :host([direction="vertical"]) .handle {
       cursor: row-resize;
     }
 
@@ -56,17 +56,17 @@ export class ResizablePanel extends LitElement {
       height: 32px;
       border-radius: 999px;
       background: var(--rp-handle-color, #c5c7ce);
-      content: '';
+      content: "";
     }
 
-    :host([direction='vertical']) .handle::before {
+    :host([direction="vertical"]) .handle::before {
       width: 32px;
       height: 2px;
     }
   `
 
   @property({ reflect: true })
-  direction: 'horizontal' | 'vertical' = 'horizontal'
+  direction: "horizontal" | "vertical" = "horizontal"
 
   @property({ type: Number })
   size = 50
@@ -86,9 +86,9 @@ export class ResizablePanel extends LitElement {
 
   protected updated(changedProperties: Map<string, unknown>) {
     if (
-      changedProperties.has('size') ||
-      changedProperties.has('min') ||
-      changedProperties.has('max')
+      changedProperties.has("size") ||
+      changedProperties.has("min") ||
+      changedProperties.has("max")
     ) {
       this.size = this.clampSize(this.size)
       this.updateSizeProperty()
@@ -98,29 +98,29 @@ export class ResizablePanel extends LitElement {
   private startResize(event: PointerEvent) {
     event.preventDefault()
     this.dragStartPosition =
-      this.direction === 'vertical' ? event.clientY : event.clientX
+      this.direction === "vertical" ? event.clientY : event.clientX
     this.dragStartSize = this.size
     this.setPointerCapture(event.pointerId)
-    this.addEventListener('pointermove', this.resize)
-    this.addEventListener('pointerup', this.stopResize)
-    this.addEventListener('pointercancel', this.stopResize)
+    this.addEventListener("pointermove", this.resize)
+    this.addEventListener("pointerup", this.stopResize)
+    this.addEventListener("pointercancel", this.stopResize)
   }
 
   private resize = (event: PointerEvent) => {
     const rect = this.getBoundingClientRect()
-    const totalSize = this.direction === 'vertical' ? rect.height : rect.width
+    const totalSize = this.direction === "vertical" ? rect.height : rect.width
 
     if (!totalSize) {
       return
     }
 
     const position =
-      this.direction === 'vertical' ? event.clientY : event.clientX
+      this.direction === "vertical" ? event.clientY : event.clientX
     const delta = ((position - this.dragStartPosition) / totalSize) * 100
     this.size = this.clampSize(this.dragStartSize + delta)
     this.updateSizeProperty()
     this.dispatchEvent(
-      new CustomEvent<ResizablePanelEventData>('resize', {
+      new CustomEvent<ResizablePanelEventData>("resize", {
         detail: { size: this.size },
         bubbles: true,
         composed: true,
@@ -133,9 +133,9 @@ export class ResizablePanel extends LitElement {
       this.releasePointerCapture(event.pointerId)
     }
 
-    this.removeEventListener('pointermove', this.resize)
-    this.removeEventListener('pointerup', this.stopResize)
-    this.removeEventListener('pointercancel', this.stopResize)
+    this.removeEventListener("pointermove", this.resize)
+    this.removeEventListener("pointerup", this.stopResize)
+    this.removeEventListener("pointercancel", this.stopResize)
   }
 
   private clampSize(size: number) {
@@ -145,7 +145,7 @@ export class ResizablePanel extends LitElement {
   }
 
   private updateSizeProperty() {
-    this.style.setProperty('--rp-size', `${this.clampSize(this.size)}%`)
+    this.style.setProperty("--rp-size", `${this.clampSize(this.size)}%`)
   }
 
   render() {

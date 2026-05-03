@@ -1,5 +1,5 @@
-import { css, html, LitElement } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { css, html, LitElement } from "lit"
+import { customElement, property } from "lit/decorators.js"
 
 export interface ScaleEventData {
   blockSize: number
@@ -7,7 +7,7 @@ export interface ScaleEventData {
   scale: number
 }
 
-@customElement('screen-fit')
+@customElement("screen-fit")
 export class ScreenFit extends LitElement {
   static styles = css`
     :host {
@@ -39,14 +39,14 @@ export class ScreenFit extends LitElement {
     }
   `
 
-  @property({ type: Number, attribute: 'draft-width' })
+  @property({ type: Number, attribute: "draft-width" })
   draftWidth = 0
 
-  @property({ type: Number, attribute: 'draft-height' })
+  @property({ type: Number, attribute: "draft-height" })
   draftHeight = 0
 
   @property()
-  fit: 'contain' | 'cover' = 'contain'
+  fit: "contain" | "cover" = "contain"
 
   private currentScale = Number.NaN
   private hasWarnedInvalidSize = false
@@ -62,9 +62,9 @@ export class ScreenFit extends LitElement {
 
   protected updated(changedProperties: Map<string, unknown>) {
     if (
-      changedProperties.has('draftWidth') ||
-      changedProperties.has('draftHeight') ||
-      changedProperties.has('fit')
+      changedProperties.has("draftWidth") ||
+      changedProperties.has("draftHeight") ||
+      changedProperties.has("fit")
     ) {
       this.updateSizeProperties()
       this.scheduleTransform()
@@ -78,8 +78,8 @@ export class ScreenFit extends LitElement {
   }
 
   private updateSizeProperties() {
-    this.style.setProperty('--sf-width', `${this.draftWidth}px`)
-    this.style.setProperty('--sf-height', `${this.draftHeight}px`)
+    this.style.setProperty("--sf-width", `${this.draftWidth}px`)
+    this.style.setProperty("--sf-height", `${this.draftHeight}px`)
   }
 
   private scheduleTransform() {
@@ -94,7 +94,7 @@ export class ScreenFit extends LitElement {
     if (!this.draftWidth || !this.draftHeight || !inlineSize || !blockSize) {
       if (!this.hasWarnedInvalidSize) {
         console.warn(
-          'screen-fit must have draft-width, draft-height, and a visible container size',
+          "screen-fit must have draft-width, draft-height, and a visible container size",
         )
         this.hasWarnedInvalidSize = true
       }
@@ -105,14 +105,14 @@ export class ScreenFit extends LitElement {
     const scaleX = inlineSize / this.draftWidth
     const scaleY = blockSize / this.draftHeight
     const nextScale =
-      this.fit === 'cover' ? Math.max(scaleX, scaleY) : Math.min(scaleX, scaleY)
+      this.fit === "cover" ? Math.max(scaleX, scaleY) : Math.min(scaleX, scaleY)
 
     const translateX = (inlineSize - this.draftWidth * nextScale) / 2
     const translateY = (blockSize - this.draftHeight * nextScale) / 2
 
-    this.style.setProperty('--sf-scale', `${nextScale}`)
-    this.style.setProperty('--sf-translate-x', `${translateX}px`)
-    this.style.setProperty('--sf-translate-y', `${translateY}px`)
+    this.style.setProperty("--sf-scale", `${nextScale}`)
+    this.style.setProperty("--sf-translate-x", `${translateX}px`)
+    this.style.setProperty("--sf-translate-y", `${translateY}px`)
 
     if (nextScale === this.currentScale) {
       return
@@ -120,7 +120,7 @@ export class ScreenFit extends LitElement {
 
     this.currentScale = nextScale
     this.dispatchEvent(
-      new CustomEvent<ScaleEventData>('scale', {
+      new CustomEvent<ScaleEventData>("scale", {
         detail: { blockSize, inlineSize, scale: nextScale },
         bubbles: true,
         composed: true,

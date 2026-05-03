@@ -1,6 +1,6 @@
-import { css, html, LitElement } from 'lit'
-import { customElement, property, state } from 'lit/decorators.js'
-import { styleMap } from 'lit/directives/style-map.js'
+import { css, html, LitElement } from "lit"
+import { customElement, property, state } from "lit/decorators.js"
+import { styleMap } from "lit/directives/style-map.js"
 
 export interface AmbientImageEventData {
   blockSize: number
@@ -8,10 +8,10 @@ export interface AmbientImageEventData {
   inlineSize: number
 }
 
-type FadeDirection = 'x' | 'y' | 'both' | 'none'
-type AmbientImageVariant = 'blur' | 'fade'
+type FadeDirection = "x" | "y" | "both" | "none"
+type AmbientImageVariant = "blur" | "fade"
 
-@customElement('ambient-image')
+@customElement("ambient-image")
 export class AmbientImage extends LitElement {
   static styles = css`
     :host {
@@ -42,11 +42,11 @@ export class AmbientImage extends LitElement {
       line-height: 0;
     }
 
-    :host([variant='blur']) {
+    :host([variant="blur"]) {
       padding: var(--ai-padding);
     }
 
-    :host([variant='fade']) {
+    :host([variant="fade"]) {
       padding: 0;
     }
 
@@ -70,7 +70,7 @@ export class AmbientImage extends LitElement {
       position: absolute;
       inset: 0;
       background: var(--ai-overlay);
-      content: '';
+      content: "";
     }
 
     img {
@@ -133,52 +133,52 @@ export class AmbientImage extends LitElement {
   `
 
   @property()
-  src = ''
+  src = ""
 
   @property()
-  alt = ''
+  alt = ""
 
   @property()
-  fit: 'contain' | 'cover' = 'contain'
+  fit: "contain" | "cover" = "contain"
 
   @property({ reflect: true })
-  variant: AmbientImageVariant = 'blur'
+  variant: AmbientImageVariant = "blur"
 
   @property()
-  fade: FadeDirection = 'x'
+  fade: FadeDirection = "x"
 
-  @property({ attribute: 'fade-size' })
-  fadeSize = '14%'
-
-  @property()
-  blur = '36px'
-
-  @property({ attribute: 'image-radius' })
-  imageRadius = '8px'
-
-  @property({ attribute: 'overlay-color' })
-  overlayColor = 'rgb(0 0 0 / 24%)'
+  @property({ attribute: "fade-size" })
+  fadeSize = "14%"
 
   @property()
-  padding = 'clamp(24px, 6vw, 72px)'
+  blur = "36px"
 
-  @property({ attribute: 'backdrop-scale' })
-  backdropScale = '1.08'
+  @property({ attribute: "image-radius" })
+  imageRadius = "8px"
 
-  @property({ attribute: 'background-color' })
-  backgroundColor = '#111827'
+  @property({ attribute: "overlay-color" })
+  overlayColor = "rgb(0 0 0 / 24%)"
+
+  @property()
+  padding = "clamp(24px, 6vw, 72px)"
+
+  @property({ attribute: "backdrop-scale" })
+  backdropScale = "1.08"
+
+  @property({ attribute: "background-color" })
+  backgroundColor = "#111827"
 
   @property({
-    attribute: 'auto-color',
+    attribute: "auto-color",
     converter: {
-      fromAttribute: (value) => value !== 'false',
-      toAttribute: (value: boolean) => (value ? '' : 'false'),
+      fromAttribute: (value) => value !== "false",
+      toAttribute: (value: boolean) => (value ? "" : "false"),
     },
   })
   autoColor = true
 
-  @property({ attribute: 'cross-origin' })
-  crossOrigin: '' | 'anonymous' | 'use-credentials' | null = null
+  @property({ attribute: "cross-origin" })
+  crossOrigin: "" | "anonymous" | "use-credentials" | null = null
 
   @state()
   private resolvedColor = this.backgroundColor
@@ -186,16 +186,16 @@ export class AmbientImage extends LitElement {
   private requestId = 0
 
   protected updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('backgroundColor')) {
+    if (changedProperties.has("backgroundColor")) {
       this.resolvedColor = this.backgroundColor
     }
 
     this.updateStyleProperties()
 
     if (
-      changedProperties.has('src') ||
-      changedProperties.has('autoColor') ||
-      changedProperties.has('crossOrigin')
+      changedProperties.has("src") ||
+      changedProperties.has("autoColor") ||
+      changedProperties.has("crossOrigin")
     ) {
       this.resolveImageColor()
     }
@@ -219,7 +219,7 @@ export class AmbientImage extends LitElement {
       this.resolvedColor = color
       this.updateStyleProperties()
       this.dispatchEvent(
-        new CustomEvent<AmbientImageEventData>('ambient', {
+        new CustomEvent<AmbientImageEventData>("ambient", {
           detail: {
             blockSize: image.naturalHeight,
             color,
@@ -236,13 +236,13 @@ export class AmbientImage extends LitElement {
   }
 
   private updateStyleProperties() {
-    this.style.setProperty('--ai-background', this.resolvedColor)
-    this.style.setProperty('--ai-blur', this.blur)
-    this.style.setProperty('--ai-fade-size', this.fadeSize)
-    this.style.setProperty('--ai-image-radius', this.imageRadius)
-    this.style.setProperty('--ai-overlay', this.overlayColor)
-    this.style.setProperty('--ai-padding', this.padding)
-    this.style.setProperty('--ai-scale', this.backdropScale)
+    this.style.setProperty("--ai-background", this.resolvedColor)
+    this.style.setProperty("--ai-blur", this.blur)
+    this.style.setProperty("--ai-fade-size", this.fadeSize)
+    this.style.setProperty("--ai-image-radius", this.imageRadius)
+    this.style.setProperty("--ai-overlay", this.overlayColor)
+    this.style.setProperty("--ai-padding", this.padding)
+    this.style.setProperty("--ai-scale", this.backdropScale)
   }
 
   private loadImage(src: string) {
@@ -261,8 +261,8 @@ export class AmbientImage extends LitElement {
 
   private getAverageColor(image: HTMLImageElement) {
     const sampleSize = 40
-    const canvas = document.createElement('canvas')
-    const context = canvas.getContext('2d', { willReadFrequently: true })
+    const canvas = document.createElement("canvas")
+    const context = canvas.getContext("2d", { willReadFrequently: true })
 
     if (!context) {
       return this.backgroundColor
@@ -309,19 +309,19 @@ export class AmbientImage extends LitElement {
 
   render() {
     const styles = {
-      '--ai-background': this.resolvedColor,
-      '--ai-fade-size': this.fadeSize,
+      "--ai-background": this.resolvedColor,
+      "--ai-fade-size": this.fadeSize,
     }
     const mediaStyles =
-      this.fit === 'cover'
+      this.fit === "cover"
         ? {
-            height: '100%',
-            width: '100%',
+            height: "100%",
+            width: "100%",
           }
         : {}
 
     return html`
-      ${this.variant === 'blur'
+      ${this.variant === "blur"
         ? html`
             <div class="backdrop" aria-hidden="true">
               <img
@@ -339,7 +339,7 @@ export class AmbientImage extends LitElement {
           crossorigin=${this.crossOrigin ?? undefined}
           style=${styleMap(styles)}
         />
-        ${this.variant !== 'fade' || this.fade === 'none'
+        ${this.variant !== "fade" || this.fade === "none"
           ? null
           : html`<span
               class=${`fade ${this.fade}`}

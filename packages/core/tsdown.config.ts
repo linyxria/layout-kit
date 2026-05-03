@@ -1,14 +1,14 @@
-import { defineConfig } from 'tsdown'
+import { defineConfig } from "tsdown"
 
 export default defineConfig({
-  entry: 'src/index.ts',
-  format: ['esm', 'cjs', 'iife'],
-  globalName: 'LayoutKit',
+  entry: "src/index.ts",
+  format: ["esm", "cjs", "iife"],
+  globalName: "LayoutKit",
   dts: true,
   sourcemap: true,
-  platform: 'browser',
+  platform: "browser",
   deps: {
-    alwaysBundle: ['lit', /^lit\//],
+    alwaysBundle: ["lit", /^lit\//],
     onlyBundle: false,
   },
 })

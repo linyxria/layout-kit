@@ -1,12 +1,12 @@
-import { css, html, LitElement } from 'lit'
-import { customElement, property, query } from 'lit/decorators.js'
+import { css, html, LitElement } from "lit"
+import { customElement, property, query } from "lit/decorators.js"
 
 export interface MasonryLayoutEventData {
   columns: number
   height: number
 }
 
-@customElement('masonry-layout')
+@customElement("masonry-layout")
 export class MasonryLayout extends LitElement {
   static styles = css`
     :host {
@@ -23,13 +23,13 @@ export class MasonryLayout extends LitElement {
     }
   `
 
-  @property({ type: Number, attribute: 'column-width' })
+  @property({ type: Number, attribute: "column-width" })
   columnWidth = 240
 
   @property({ type: Number })
   gap = 16
 
-  @query('slot')
+  @query("slot")
   private slotElement!: HTMLSlotElement
 
   private frameId = 0
@@ -61,7 +61,7 @@ export class MasonryLayout extends LitElement {
   }
 
   protected updated(changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('columnWidth') || changedProperties.has('gap')) {
+    if (changedProperties.has("columnWidth") || changedProperties.has("gap")) {
       this.scheduleLayout()
     }
   }
@@ -84,7 +84,7 @@ export class MasonryLayout extends LitElement {
     const items = this.getItems()
 
     if (!inlineSize || items.length === 0) {
-      this.style.height = ''
+      this.style.height = ""
       return
     }
 
@@ -98,10 +98,10 @@ export class MasonryLayout extends LitElement {
     const heights = Array.from({ length: columns }, () => 0)
 
     for (const item of items) {
-      item.style.position = 'absolute'
+      item.style.position = "absolute"
       item.style.width = `${itemWidth}px`
-      item.style.left = '0'
-      item.style.top = '0'
+      item.style.left = "0"
+      item.style.top = "0"
 
       const columnIndex = this.getShortestColumnIndex(heights)
       const x = columnIndex * (itemWidth + safeGap)
@@ -122,7 +122,7 @@ export class MasonryLayout extends LitElement {
       this.previousColumns = columns
       this.previousHeight = nextHeight
       this.dispatchEvent(
-        new CustomEvent<MasonryLayoutEventData>('layout', {
+        new CustomEvent<MasonryLayoutEventData>("layout", {
           detail: { columns, height: nextHeight },
           bubbles: true,
           composed: true,

@@ -11,7 +11,7 @@
     system-ui,
     -apple-system,
     BlinkMacSystemFont,
-    'Segoe UI',
+    "Segoe UI",
     sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -279,8 +279,8 @@ resizable-panel:not(:defined) {
   overflow: hidden;
 }
 
-resizable-panel:not(:defined) [slot='start'],
-resizable-panel:not(:defined) [slot='end'] {
+resizable-panel:not(:defined) [slot="start"],
+resizable-panel:not(:defined) [slot="end"] {
   height: 100%;
 }
 

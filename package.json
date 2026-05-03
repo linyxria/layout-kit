@@ -3,7 +3,6 @@
   "type": "module",
   "scripts": {
     "build": "pnpm --filter @layout-kit/core build && pnpm --filter @layout-kit/react build && pnpm --filter @layout-kit/vue build",
-    "dev": "pnpm --filter @layout-kit/playground dev",
     "lint": "eslint .",
     "format": "prettier . --write"
   },

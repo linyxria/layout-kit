@@ -28,7 +28,7 @@ pnpm build
 安装并导入核心包后，自定义元素会自动注册：
 
 ```ts
-import '@layout-kit/core'
+import "@layout-kit/core"
 ```
 
 ### AutoGrid
@@ -46,7 +46,7 @@ import '@layout-kit/core'
 监听列数变化：
 
 ```ts
-document.querySelector('auto-grid')?.addEventListener('grid', (event) => {
+document.querySelector("auto-grid")?.addEventListener("grid", (event) => {
   console.log(event.detail.columns)
 })
 ```
@@ -158,7 +158,7 @@ import {
   AutoGrid,
   ResizablePanel,
   VirtualList,
-} from '@layout-kit/react'
+} from "@layout-kit/react"
 
 export function Demo() {
   const rows = Array.from({ length: 1000 }, (_, index) => `条目 ${index + 1}`)
@@ -196,7 +196,7 @@ import {
   AutoGrid,
   ResizablePanel,
   VirtualList,
-} from '@layout-kit/vue'
+} from "@layout-kit/vue"
 
 const rows = Array.from({ length: 1000 }, (_, index) => `条目 ${index + 1}`)
 </script>
