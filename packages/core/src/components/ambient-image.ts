@@ -150,8 +150,8 @@ export class AmbientImage extends LitElement {
   @property({ attribute: "fade-size" })
   fadeSize = "14%"
 
-  @property()
-  blur = "36px"
+  @property({ attribute: "blur" })
+  backdropBlur = "36px"
 
   @property({ attribute: "image-radius" })
   imageRadius = "8px"
@@ -237,7 +237,7 @@ export class AmbientImage extends LitElement {
 
   private updateStyleProperties() {
     this.style.setProperty("--ai-background", this.resolvedColor)
-    this.style.setProperty("--ai-blur", this.blur)
+    this.style.setProperty("--ai-blur", this.backdropBlur)
     this.style.setProperty("--ai-fade-size", this.fadeSize)
     this.style.setProperty("--ai-image-radius", this.imageRadius)
     this.style.setProperty("--ai-overlay", this.overlayColor)
