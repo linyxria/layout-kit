@@ -1,171 +1,301 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Layout Kit Playground</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      window.tailwind = window.tailwind || {}
+      window.tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              ink: "#172033",
+              muted: "#657184",
+              line: "#dfe6ee",
+              aqua: "#0f9f8d",
+            },
+            fontFamily: {
+              sans: [
+                "Inter",
+                "ui-sans-serif",
+                "system-ui",
+                "-apple-system",
+                "BlinkMacSystemFont",
+                "Segoe UI",
+                "sans-serif",
+              ],
+            },
+          },
+        },
+      }
+    </script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body>
-    <main class="shell">
-      <aside class="sidebar" aria-label="playground 分区">
-        <a class="brand" href="#overview" aria-label="Layout Kit Playground">
-          <span class="brand-mark">LK</span>
-          <span>
-            <strong>Layout Kit</strong>
-            <small>Playground</small>
-          </span>
-        </a>
-        <nav class="menu">
-          <a href="#core">Core</a>
-        </nav>
-      </aside>
+  <body class="min-w-80 bg-[#f7f9fb] font-sans text-ink antialiased">
+    <main class="overflow-hidden">
+      <header
+        class="sticky top-0 z-20 border-b border-line/80 bg-white/86 backdrop-blur-xl"
+      >
+        <div
+          class="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-5 py-4 sm:px-8"
+        >
+          <a class="flex items-center gap-3" href="#top">
+            <span
+              class="grid size-10 place-items-center rounded-lg border border-[#cdd8e4] bg-[#ecfbf7] text-sm font-black text-aqua"
+            >
+              LK
+            </span>
+            <span class="leading-tight">
+              <strong class="block text-sm font-black tracking-tight">
+                Layout Kit
+              </strong>
+              <span class="block text-xs font-semibold text-muted">
+                Web Components Playground
+              </span>
+            </span>
+          </a>
 
-      <div class="workspace">
-        <header id="overview" class="hero">
-          <div>
-            <p class="eyebrow">Layout Kit Playground</p>
-            <h1>响应式布局组件</h1>
+          <nav
+            aria-label="Component sections"
+            class="hidden items-center gap-1 text-sm font-bold text-[#445067] md:flex"
+          >
+            <a class="nav-link" href="#grid">Grid</a>
+            <a class="nav-link" href="#media">Media</a>
+            <a class="nav-link" href="#panels">Panels</a>
+          </nav>
+        </div>
+      </header>
+
+      <section id="top" class="relative">
+        <div
+          class="mx-auto grid min-h-[calc(100vh-73px)] w-full max-w-7xl items-center gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1fr)] lg:py-16"
+        >
+          <div class="max-w-3xl">
+            <h1
+              class="max-w-3xl text-5xl font-black leading-[0.95] tracking-normal text-ink sm:text-6xl lg:text-7xl"
+            >
+              Layout primitives that stay close to the browser.
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-[#536174]">
+              A compact Web Components toolkit for responsive grids, masonry
+              flows, virtualized lists, resizable panes, ambient media, and
+              design-canvas scaling.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-3">
+              <a class="button-primary" href="#grid">Explore components</a>
+              <a class="button-secondary" href="../README.md">Read docs</a>
+            </div>
           </div>
-          <dl class="stats" aria-label="playground 统计">
-            <div>
-              <dt>6</dt>
-              <dd>个布局组件</dd>
-            </div>
-            <div>
-              <dt>dist</dt>
-              <dd>使用构建产物</dd>
-            </div>
-          </dl>
-        </header>
 
-        <section id="core" class="demo-section">
+          <div class="hero-preview" aria-label="Layout Kit component preview">
+            <div class="hero-preview-header">
+              <span>core bundle</span>
+              <strong>6 live elements</strong>
+            </div>
+            <auto-grid column-width="140" gap="12" class="hero-grid">
+              <article class="preview-tile accent-aqua">
+                <span>AutoGrid</span>
+                <strong>Container-aware columns</strong>
+              </article>
+              <article class="preview-tile accent-blue">
+                <span>VirtualList</span>
+                <strong>Visible range rendering</strong>
+              </article>
+              <article class="preview-tile accent-rose">
+                <span>ScreenFit</span>
+                <strong>Canvas scaling</strong>
+              </article>
+            </auto-grid>
+            <ambient-image
+              src="./image.webp"
+              alt="Abstract product interface preview"
+              variant="blur"
+              image-radius="16px"
+              class="hero-ambient"
+            ></ambient-image>
+          </div>
+        </div>
+      </section>
+
+      <section
+        id="grid"
+        class="border-y border-line/70 bg-white px-5 py-16 sm:px-8"
+      >
+        <div class="mx-auto w-full max-w-7xl">
           <div class="section-heading">
-            <p class="eyebrow">Core</p>
-            <h2>直接使用标签</h2>
+            <h2>Responsive structure, without framework lock-in.</h2>
+            <p>
+              Native custom elements do the layout work. Use them directly, or
+              keep React and Vue component ergonomics through the adapters.
+            </p>
           </div>
-          <div class="core-demos">
-            <div class="component-demo">
+
+          <div class="mt-10 grid gap-5 lg:grid-cols-2">
+            <article class="demo-panel">
               <div class="demo-label">
                 <span>auto-grid</span>
-                <strong>容器变宽时自动多排几列</strong>
+                <strong>Columns follow the container width</strong>
               </div>
               <auto-grid column-width="152" gap="12">
-                <article class="tile accent-green">
-                  <span>卡片 A</span>
-                  <strong>宽度够就并排</strong>
+                <article class="tile accent-aqua">
+                  <span>Card A</span>
+                  <strong>Expands into available space</strong>
                 </article>
                 <article class="tile accent-blue">
-                  <span>卡片 B</span>
-                  <strong>空间小就换行</strong>
+                  <span>Card B</span>
+                  <strong>Wraps cleanly on small widths</strong>
                 </article>
                 <article class="tile accent-rose">
-                  <span>卡片 C</span>
-                  <strong>间距保持一致</strong>
+                  <span>Card C</span>
+                  <strong>Keeps spacing consistent</strong>
                 </article>
               </auto-grid>
-            </div>
+            </article>
 
-            <div class="component-demo">
+            <article class="demo-panel">
               <div class="demo-label">
                 <span>masonry-layout</span>
-                <strong>不等高卡片也能贴紧排列</strong>
+                <strong>Compact flows for uneven cards</strong>
               </div>
-              <masonry-layout column-width="150" gap="12">
-                <article class="masonry-card tall">这张卡片比较高</article>
-                <article class="masonry-card medium">
-                  内容多一点，高度也多一点。
+              <masonry-layout column-width="150" gap="12" class="masonry-demo">
+                <article class="masonry-card tall">
+                  Taller feature note with more content.
                 </article>
-                <article class="masonry-card short">短内容</article>
                 <article class="masonry-card medium">
-                  下一张会放到更短的列里。
+                  A medium card lands in the shortest column.
+                </article>
+                <article class="masonry-card short">Quick note.</article>
+                <article class="masonry-card medium">
+                  Resize the viewport to watch the layout settle.
                 </article>
                 <article class="masonry-card tall">
-                  调整窗口宽度可以看到它重新排布。
+                  Cards keep their natural height.
                 </article>
               </masonry-layout>
-            </div>
+            </article>
+          </div>
+        </div>
+      </section>
 
-            <div class="component-demo">
-              <div class="demo-label">
-                <span>virtual-list</span>
-                <strong>长列表只处理当前看得到的区域</strong>
-              </div>
-              <virtual-list height="192" item-height="44" class="list-demo">
-                <article class="list-row">
-                  <span>第 0001 行</span>
-                  <small>当前渲染</small>
-                </article>
-                <article class="list-row">
-                  <span>第 0002 行</span>
-                  <small>当前渲染</small>
-                </article>
-                <article class="list-row">
-                  <span>第 0003 行</span>
-                  <small>当前渲染</small>
-                </article>
-                <article class="list-row">
-                  <span>第 0004 行</span>
-                  <small>当前渲染</small>
-                </article>
-                <article class="list-row">
-                  <span>第 0005 行</span>
-                  <small>当前渲染</small>
-                </article>
-                <article class="list-row">
-                  <span>第 0006 行</span>
-                  <small>当前渲染</small>
-                </article>
-              </virtual-list>
-            </div>
+      <section id="media" class="px-5 py-16 sm:px-8">
+        <div class="mx-auto w-full max-w-7xl">
+          <div class="section-heading">
+            <h2>Media and scale helpers for product surfaces.</h2>
+            <p>
+              Build polished previews, posters, dashboards, and fixed-ratio
+              canvases without reimplementing the same sizing logic.
+            </p>
+          </div>
 
-            <div class="component-demo">
-              <div class="demo-label">
-                <span>resizable-panel</span>
-                <strong>拖动中间分隔条改变比例</strong>
-              </div>
-              <resizable-panel size="46" min="28" max="72" class="panel">
-                <div slot="start" class="panel-pane">
-                  <span>左侧区域</span>
-                  <strong>放列表或导航</strong>
-                </div>
-                <div slot="end" class="panel-pane">
-                  <span>右侧区域</span>
-                  <strong>放详情或预览</strong>
-                </div>
-              </resizable-panel>
-            </div>
-
-            <div class="component-demo">
+          <div
+            class="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(340px,0.95fr)]"
+          >
+            <article class="demo-panel">
               <div class="demo-label">
                 <span>ambient-image</span>
-                <strong>图片边缘自然融进背景</strong>
+                <strong>Generate a soft backdrop from the image</strong>
               </div>
               <ambient-image
-                src="./img.webp"
-                alt="抽象界面横幅"
+                src="./image.webp"
+                alt="Abstract interface banner"
                 variant="blur"
-                image-radius="14px"
+                image-radius="18px"
                 class="ambient-demo"
               ></ambient-image>
-            </div>
+            </article>
 
-            <div class="component-demo">
+            <article class="demo-panel">
               <div class="demo-label">
                 <span>screen-fit</span>
-                <strong>把设计稿缩进父容器里</strong>
+                <strong>Scale fixed canvases into fluid containers</strong>
               </div>
               <screen-fit draft-width="640" draft-height="360" class="fit-demo">
                 <article class="fit-canvas">
                   <span>640 x 360</span>
-                  <strong>按父容器缩放</strong>
+                  <strong>Design canvas</strong>
                 </article>
               </screen-fit>
-            </div>
+            </article>
           </div>
-        </section>
-      </div>
+        </div>
+      </section>
+
+      <section
+        id="panels"
+        class="border-t border-line/70 bg-[#eef3f7] px-5 py-16 sm:px-8"
+      >
+        <div class="mx-auto w-full max-w-7xl">
+          <div class="section-heading">
+            <h2>Interaction patterns for dense interfaces.</h2>
+            <p>
+              Keep long lists fast and let users rebalance work areas without
+              giving up native markup.
+            </p>
+          </div>
+
+          <div class="mt-10 grid gap-5 lg:grid-cols-2">
+            <article class="demo-panel">
+              <div class="demo-label">
+                <span>virtual-list</span>
+                <strong>Only show the visible row range</strong>
+              </div>
+              <virtual-list height="248" item-height="44" class="list-demo">
+                <article class="list-row">
+                  <span>Row 0001</span><small>visible range</small>
+                </article>
+                <article class="list-row">
+                  <span>Row 0002</span><small>visible range</small>
+                </article>
+                <article class="list-row">
+                  <span>Row 0003</span><small>visible range</small>
+                </article>
+                <article class="list-row">
+                  <span>Row 0004</span><small>visible range</small>
+                </article>
+                <article class="list-row">
+                  <span>Row 0005</span><small>visible range</small>
+                </article>
+                <article class="list-row">
+                  <span>Row 0006</span><small>visible range</small>
+                </article>
+                <article class="list-row">
+                  <span>Row 0007</span><small>overscan</small>
+                </article>
+                <article class="list-row">
+                  <span>Row 0008</span><small>overscan</small>
+                </article>
+                <article class="list-row">
+                  <span>Row 0009</span><small>overscan</small>
+                </article>
+                <article class="list-row">
+                  <span>Row 0010</span><small>overscan</small>
+                </article>
+              </virtual-list>
+            </article>
+
+            <article class="demo-panel">
+              <div class="demo-label">
+                <span>resizable-panel</span>
+                <strong>Drag the divider to rebalance panes</strong>
+              </div>
+              <resizable-panel size="44" min="26" max="74" class="panel-demo">
+                <div slot="start" class="panel-pane primary-pane">
+                  <span>Outline</span>
+                  <strong>Navigation and filters</strong>
+                </div>
+                <div slot="end" class="panel-pane secondary-pane">
+                  <span>Workspace</span>
+                  <strong>Details and preview</strong>
+                </div>
+              </resizable-panel>
+            </article>
+          </div>
+        </div>
+      </section>
     </main>
+
     <script src="../packages/core/dist/index.iife.js"></script>
   </body>
 </html>
