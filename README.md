@@ -1,49 +1,64 @@
 # Layout Kit
 
-一组基于 Web Components 的响应式布局组件，并提供 React 与 Vue 包装层。核心包可以直接在原生 HTML 中使用，框架包则保留对应框架的组件写法。
+Responsive layout primitives built with Web Components, with first-class
+wrappers for React and Vue.
 
-## 包结构
+Layout Kit focuses on small, composable layout helpers that are useful in
+dashboards, editors, media previews, playgrounds, and other interface-heavy
+products. The core package registers native custom elements, while the framework
+packages keep the ergonomics of React and Vue components.
 
-- `@layout-kit/core`：注册并导出原生自定义元素。
-- `@layout-kit/react`：React 组件适配器。
-- `@layout-kit/vue`：Vue 3 组件适配器。
+## Packages
 
-## 本地开发
+- `@layout-kit/core` registers and exports the native custom elements.
+- `@layout-kit/react` exposes React components powered by the core elements.
+- `@layout-kit/vue` exposes Vue 3 components powered by the core elements.
 
-```bash
-pnpm install
-pnpm dev
-```
-
-然后直接打开 `playground/index.html` 查看 playground。这个页面会引用 `packages/core/dist/index.iife.js`，也就是构建后的 core 产物。
-
-构建包：
+## Installation
 
 ```bash
-pnpm build
+pnpm add @layout-kit/core
 ```
 
-## Core 用法
+For framework projects, install the matching adapter:
 
-安装并导入核心包后，自定义元素会自动注册：
+```bash
+pnpm add @layout-kit/core @layout-kit/react
+pnpm add @layout-kit/core @layout-kit/vue
+```
+
+## Quick Start
+
+Import the core package once to register every custom element:
 
 ```ts
 import "@layout-kit/core"
 ```
 
-### AutoGrid
-
-根据容器宽度自动计算列数。
+Then use the elements directly in HTML:
 
 ```html
 <auto-grid column-width="180" gap="16">
-  <article>卡片 A</article>
-  <article>卡片 B</article>
-  <article>卡片 C</article>
+  <article>Card A</article>
+  <article>Card B</article>
+  <article>Card C</article>
 </auto-grid>
 ```
 
-监听列数变化：
+## Components
+
+### AutoGrid
+
+Creates a responsive grid whose column count follows the available container
+width.
+
+```html
+<auto-grid column-width="180" gap="16">
+  <article>Card A</article>
+  <article>Card B</article>
+  <article>Card C</article>
+</auto-grid>
+```
 
 ```ts
 document.querySelector("auto-grid")?.addEventListener("grid", (event) => {
@@ -53,74 +68,81 @@ document.querySelector("auto-grid")?.addEventListener("grid", (event) => {
 
 ### MasonryLayout
 
-适合不等高卡片的瀑布流布局。
+Arranges uneven-height items into compact masonry columns.
 
 ```html
 <masonry-layout column-width="220" gap="16">
-  <article>短内容</article>
-  <article>更高的内容块</article>
-  <article>另一张卡片</article>
+  <article>Short card</article>
+  <article>A taller content block</article>
+  <article>Another card</article>
 </masonry-layout>
 ```
 
 ### VirtualList
 
-只渲染可视范围附近的列表项，适合大量固定高度数据。
+Keeps long fixed-height lists responsive by only showing the items around the
+visible range.
 
 ```html
 <virtual-list height="320" item-height="48" overscan="4">
-  <article>条目 1</article>
-  <article>条目 2</article>
-  <article>条目 3</article>
+  <article>Row 1</article>
+  <article>Row 2</article>
+  <article>Row 3</article>
 </virtual-list>
 ```
 
 ### ResizablePanel
 
-可拖拽调整比例的双栏面板。
+Creates a two-pane layout with a draggable separator.
 
 ```html
 <resizable-panel size="40" min="20" max="80">
-  <section slot="start">左侧</section>
-  <section slot="end">右侧</section>
+  <section slot="start">Navigation</section>
+  <section slot="end">Preview</section>
 </resizable-panel>
 ```
 
-垂直方向：
+Use `direction="vertical"` for stacked panes:
 
 ```html
 <resizable-panel direction="vertical" size="50">
-  <section slot="start">上方</section>
-  <section slot="end">下方</section>
+  <section slot="start">Top pane</section>
+  <section slot="end">Bottom pane</section>
 </resizable-panel>
 ```
 
 ### AmbientImage
 
-让图片居中展示，并基于同一张图生成氛围背景。默认 `variant="blur"` 会把图片放大、模糊并铺在容器背后，适合照片、封面、海报预览这类场景。
+Displays an image with an ambient background generated from the same source
+image. The default `variant="blur"` scales and blurs the image behind the
+foreground media, which works well for covers, posters, banners, and media
+previews.
 
 ```html
 <ambient-image
   src="/banner.png"
-  alt="活动横幅"
+  alt="Event banner"
   image-radius="12px"
   background-color="#15110f"
 ></ambient-image>
 ```
 
-如果需要之前那种横幅左右融边效果，可以切到 `variant="fade"`：
+Use `variant="fade"` when you want the image edges to blend into the surrounding
+background:
 
 ```html
 <ambient-image
   src="/banner.png"
-  alt="活动横幅"
+  alt="Event banner"
   variant="fade"
   fade="x"
   fade-size="14%"
 ></ambient-image>
 ```
 
-组件也会自动计算图片平均色，作为背景兜底色；如果图片跨域且没有正确的 CORS 响应，可以关闭自动取色并手动传入颜色：
+`AmbientImage` computes an average color from the image and uses it as a
+fallback background. For cross-origin images without the required CORS headers,
+disable automatic color extraction and pass a color manually:
 
 ```html
 <ambient-image
@@ -132,42 +154,49 @@ document.querySelector("auto-grid")?.addEventListener("grid", (event) => {
 
 ### ScreenFit
 
-把一个设计稿尺寸的页面按父容器等比缩放居中，常用于大屏页面、预览卡片、弹窗或 iframe 里的画布。
+Scales a fixed-size design canvas into its parent container. It is useful for
+large-screen dashboards, preview cards, modal canvases, and iframe-like surfaces.
 
 ```html
 <div style="width: 100%; height: 100vh">
   <screen-fit draft-width="1920" draft-height="1080">
-    <main>大屏内容</main>
+    <main>Dashboard content</main>
   </screen-fit>
 </div>
 ```
 
-默认 `fit="contain"` 会完整显示设计稿；如果希望铺满容器并允许裁切，可以使用 `fit="cover"`：
+The default `fit="contain"` keeps the whole canvas visible. Use `fit="cover"` to
+fill the container and allow cropping:
 
 ```html
 <screen-fit draft-width="1920" draft-height="1080" fit="cover">
-  <main>大屏内容</main>
+  <main>Dashboard content</main>
 </screen-fit>
 ```
 
-## React 用法
+## React
 
 ```tsx
 import {
   AmbientImage,
   AutoGrid,
   ResizablePanel,
+  ScreenFit,
   VirtualList,
 } from "@layout-kit/react"
 
 export function Demo() {
-  const rows = Array.from({ length: 1000 }, (_, index) => `条目 ${index + 1}`)
+  const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
 
   return (
     <>
-      <AutoGrid columnWidth={180} gap={16}>
-        <article>卡片 A</article>
-        <article>卡片 B</article>
+      <AutoGrid
+        columnWidth={180}
+        gap={16}
+        onGrid={(event) => console.log(event.detail.columns)}
+      >
+        <article>Card A</article>
+        <article>Card B</article>
       </AutoGrid>
 
       <VirtualList height={320} itemHeight={48}>
@@ -176,18 +205,22 @@ export function Demo() {
         ))}
       </VirtualList>
 
-      <AmbientImage src="/banner.png" alt="活动横幅" />
+      <AmbientImage src="/banner.png" alt="Event banner" />
 
       <ResizablePanel size={40} min={20} max={80}>
-        <section slot="start">左侧</section>
-        <section slot="end">右侧</section>
+        <section slot="start">Navigation</section>
+        <section slot="end">Preview</section>
       </ResizablePanel>
+
+      <ScreenFit draftWidth={1920} draftHeight={1080}>
+        <main>Dashboard content</main>
+      </ScreenFit>
     </>
   )
 }
 ```
 
-## Vue 用法
+## Vue
 
 ```vue
 <script setup lang="ts">
@@ -195,40 +228,77 @@ import {
   AmbientImage,
   AutoGrid,
   ResizablePanel,
+  ScreenFit,
   VirtualList,
 } from "@layout-kit/vue"
 
-const rows = Array.from({ length: 1000 }, (_, index) => `条目 ${index + 1}`)
+const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
 </script>
 
 <template>
-  <AutoGrid :column-width="180" :gap="16">
-    <article>卡片 A</article>
-    <article>卡片 B</article>
+  <AutoGrid
+    :column-width="180"
+    :gap="16"
+    :on-grid="(event) => console.log(event.detail.columns)"
+  >
+    <article>Card A</article>
+    <article>Card B</article>
   </AutoGrid>
 
   <VirtualList :height="320" :item-height="48">
     <article v-for="row in rows" :key="row">{{ row }}</article>
   </VirtualList>
 
-  <AmbientImage src="/banner.png" alt="活动横幅" />
+  <AmbientImage src="/banner.png" alt="Event banner" />
 
   <ResizablePanel :size="40" :min="20" :max="80">
-    <section slot="start">左侧</section>
-    <section slot="end">右侧</section>
+    <section slot="start">Navigation</section>
+    <section slot="end">Preview</section>
   </ResizablePanel>
+
+  <ScreenFit :draft-width="1920" :draft-height="1080">
+    <main>Dashboard content</main>
+  </ScreenFit>
 </template>
 ```
 
-## 事件
+## Events
 
-组件会派发原生 `CustomEvent`：
+All core elements dispatch native `CustomEvent` events:
 
-- `auto-grid`：`grid`，返回 `{ columns }`。
-- `masonry-layout`：`layout`，返回 `{ columns, height }`。
-- `virtual-list`：`range`，返回 `{ start, end }`。
-- `resizable-panel`：`resize`，返回 `{ size }`。
-- `screen-fit`：`scale`，返回 `{ scale, inlineSize, blockSize }`。
-- `ambient-image`：`ambient`，返回 `{ color, inlineSize, blockSize }`。
+| Element | Event | Detail |
+| --- | --- | --- |
+| `auto-grid` | `grid` | `{ columns }` |
+| `masonry-layout` | `layout` | `{ columns, height }` |
+| `virtual-list` | `range` | `{ start, end }` |
+| `resizable-panel` | `resize` | `{ size }` |
+| `screen-fit` | `scale` | `{ scale, inlineSize, blockSize }` |
+| `ambient-image` | `ambient` | `{ color, inlineSize, blockSize }` |
 
-React 包装层使用 `onAmbient`、`onGrid`、`onLayout`、`onRange`、`onResize`、`onScale`。Vue 包装层同样暴露对应的事件回调 prop。
+React wrappers expose `onAmbient`, `onGrid`, `onLayout`, `onRange`, `onResize`,
+and `onScale`. Vue wrappers expose the same callback props.
+
+## Local Development
+
+Install dependencies:
+
+```bash
+pnpm install
+```
+
+Build all packages:
+
+```bash
+pnpm build
+```
+
+The playground loads the built core bundle from
+`packages/core/dist/index.iife.js`, so build the project before opening
+`playground/index.html`.
+
+Useful commands:
+
+```bash
+pnpm lint
+pnpm format
+```
