@@ -4,292 +4,283 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Layout Kit Playground</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      window.tailwind = window.tailwind || {}
-      window.tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              ink: "#172033",
-              muted: "#657184",
-              line: "#dfe6ee",
-              aqua: "#0f9f8d",
-            },
-            fontFamily: {
-              sans: [
-                "Inter",
-                "ui-sans-serif",
-                "system-ui",
-                "-apple-system",
-                "BlinkMacSystemFont",
-                "Segoe UI",
-                "sans-serif",
-              ],
-            },
-          },
-        },
-      }
-    </script>
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body class="min-w-80 bg-[#f7f9fb] font-sans text-ink antialiased">
-    <main class="overflow-hidden">
-      <header
-        class="sticky top-0 z-20 border-b border-line/80 bg-white/86 backdrop-blur-xl"
-      >
-        <div
-          class="mx-auto flex w-full max-w-7xl items-center justify-between gap-6 px-5 py-4 sm:px-8"
-        >
-          <a class="flex items-center gap-3" href="#top">
-            <span
-              class="grid size-10 place-items-center rounded-lg border border-[#cdd8e4] bg-[#ecfbf7] text-sm font-black text-aqua"
-            >
-              LK
-            </span>
-            <span class="leading-tight">
-              <strong class="block text-sm font-black tracking-tight">
-                Layout Kit
-              </strong>
-              <span class="block text-xs font-semibold text-muted">
-                Web Components Playground
-              </span>
-            </span>
-          </a>
+  <body>
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="brand" href="#top" aria-label="Layout Kit home">
+          <span class="brand-mark">LK</span>
+          <span>
+            <strong>Layout Kit</strong>
+            <small>Responsive primitives</small>
+          </span>
+        </a>
 
-          <nav
-            aria-label="Component sections"
-            class="hidden items-center gap-1 text-sm font-bold text-[#445067] md:flex"
-          >
-            <a class="nav-link" href="#grid">Grid</a>
-            <a class="nav-link" href="#media">Media</a>
-            <a class="nav-link" href="#panels">Panels</a>
-          </nav>
-        </div>
-      </header>
+        <nav class="nav-links" aria-label="Playground sections">
+          <a href="#responsive" data-nav-link>Responsive</a>
+          <a href="#media" data-nav-link>Media</a>
+          <a href="#interaction" data-nav-link>Interaction</a>
+        </nav>
+      </div>
+    </header>
 
-      <section id="top" class="relative">
-        <div
-          class="mx-auto grid min-h-[calc(100vh-73px)] w-full max-w-7xl items-center gap-10 px-5 py-12 sm:px-8 lg:grid-cols-[minmax(0,0.92fr)_minmax(420px,1fr)] lg:py-16"
-        >
-          <div class="max-w-3xl">
-            <h1
-              class="max-w-3xl text-5xl font-black leading-[0.95] tracking-normal text-ink sm:text-6xl lg:text-7xl"
-            >
-              Layout primitives that stay close to the browser.
-            </h1>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-[#536174]">
-              A compact Web Components toolkit for responsive grids, masonry
-              flows, virtualized lists, resizable panes, ambient media, and
-              design-canvas scaling.
+    <main>
+      <section id="top" class="hero-section">
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <h1>Layout primitives for fluid product interfaces.</h1>
+            <p>
+              A compact Web Components toolkit for adaptive grids, media
+              surfaces, fixed-ratio canvases, virtual ranges, and resizable
+              layouts.
             </p>
-            <div class="mt-8 flex flex-wrap gap-3">
-              <a class="button-primary" href="#grid">Explore components</a>
-              <a class="button-secondary" href="../README.md">Read docs</a>
+            <div class="hero-actions">
+              <a class="button primary" href="#responsive">Explore demos</a>
+              <a class="button secondary" href="../README.md">Read docs</a>
             </div>
           </div>
 
-          <div class="hero-preview" aria-label="Layout Kit component preview">
-            <div class="hero-preview-header">
-              <span>core bundle</span>
-              <strong>6 live elements</strong>
+          <div class="hero-showcase" aria-label="Live Layout Kit preview">
+            <div class="showcase-copy">
+              <span>Live composition</span>
+              <strong>Six primitives, one native surface.</strong>
             </div>
-            <auto-grid column-width="140" gap="12" class="hero-grid">
-              <article class="preview-tile accent-aqua">
-                <span>AutoGrid</span>
-                <strong>Container-aware columns</strong>
-              </article>
-              <article class="preview-tile accent-blue">
-                <span>VirtualList</span>
-                <strong>Visible range rendering</strong>
-              </article>
-              <article class="preview-tile accent-rose">
-                <span>ScreenFit</span>
-                <strong>Canvas scaling</strong>
-              </article>
-            </auto-grid>
-            <ambient-image
-              src="./image.webp"
-              alt="Abstract product interface preview"
-              variant="blur"
-              image-radius="16px"
-              class="hero-ambient"
-            ></ambient-image>
+
+            <div class="showcase-stage">
+              <ambient-image
+                src="./image.webp"
+                alt="Abstract interface preview"
+                variant="blur"
+                backdrop-blur="28px"
+                image-radius="8px"
+                class="hero-media"
+              ></ambient-image>
+
+              <auto-grid
+                column-width="132"
+                gap="10"
+                class="hero-component-grid"
+              >
+                <article>
+                  <span>AutoGrid</span>
+                  <strong>Container aware</strong>
+                </article>
+                <article>
+                  <span>ScreenFit</span>
+                  <strong>Fixed canvas scale</strong>
+                </article>
+                <article>
+                  <span>AmbientImage</span>
+                  <strong>Media atmosphere</strong>
+                </article>
+              </auto-grid>
+            </div>
           </div>
         </div>
       </section>
 
-      <section
-        id="grid"
-        class="border-y border-line/70 bg-white px-5 py-16 sm:px-8"
-      >
-        <div class="mx-auto w-full max-w-7xl">
-          <div class="section-heading">
-            <h2>Responsive structure, without framework lock-in.</h2>
+      <section id="responsive" class="section-block" data-section>
+        <div class="shell section-grid">
+          <div class="section-intro">
+            <h2>Responsive structure that follows its container.</h2>
             <p>
-              Native custom elements do the layout work. Use them directly, or
-              keep React and Vue component ergonomics through the adapters.
+              Use native elements for layout rules that should stay portable
+              across apps, frameworks, and design systems.
             </p>
           </div>
 
-          <div class="mt-10 grid gap-5 lg:grid-cols-2">
-            <article class="demo-panel">
-              <div class="demo-label">
+          <div class="demo-gallery">
+            <article class="demo-card wide">
+              <div class="demo-heading">
                 <span>auto-grid</span>
-                <strong>Columns follow the container width</strong>
+                <strong>Adaptive columns</strong>
               </div>
-              <auto-grid column-width="152" gap="12">
-                <article class="tile accent-aqua">
+              <auto-grid
+                column-width="156"
+                gap="12"
+                class="auto-grid-demo"
+                data-grid-demo
+              >
+                <article class="grid-tile teal">
                   <span>Card A</span>
-                  <strong>Expands into available space</strong>
+                  <strong>Fills open space</strong>
                 </article>
-                <article class="tile accent-blue">
+                <article class="grid-tile blue">
                   <span>Card B</span>
-                  <strong>Wraps cleanly on small widths</strong>
+                  <strong>Reflows cleanly</strong>
                 </article>
-                <article class="tile accent-rose">
+                <article class="grid-tile violet">
                   <span>Card C</span>
-                  <strong>Keeps spacing consistent</strong>
+                  <strong>Keeps rhythm</strong>
                 </article>
               </auto-grid>
+              <p class="metric">
+                <span>Columns</span>
+                <strong data-grid-count>auto</strong>
+              </p>
             </article>
 
-            <article class="demo-panel">
-              <div class="demo-label">
+            <article class="demo-card wide">
+              <div class="demo-heading">
                 <span>masonry-layout</span>
-                <strong>Compact flows for uneven cards</strong>
+                <strong>Natural height flow</strong>
               </div>
-              <masonry-layout column-width="150" gap="12" class="masonry-demo">
-                <article class="masonry-card tall">
-                  Taller feature note with more content.
-                </article>
-                <article class="masonry-card medium">
-                  A medium card lands in the shortest column.
-                </article>
-                <article class="masonry-card short">Quick note.</article>
-                <article class="masonry-card medium">
-                  Resize the viewport to watch the layout settle.
-                </article>
-                <article class="masonry-card tall">
-                  Cards keep their natural height.
-                </article>
+              <masonry-layout column-width="112" gap="12" class="masonry-demo">
+                <article class="masonry-card tall">Editorial module</article>
+                <article class="masonry-card short">Release note</article>
+                <article class="masonry-card medium">Compact feature</article>
+                <article class="masonry-card xlarge">Visual preview</article>
+                <article class="masonry-card short">Small note</article>
+                <article class="masonry-card medium">Flexible content</article>
+                <article class="masonry-card tall">Persistent rhythm</article>
+                <article class="masonry-card short">Status tile</article>
               </masonry-layout>
             </article>
           </div>
         </div>
       </section>
 
-      <section id="media" class="px-5 py-16 sm:px-8">
-        <div class="mx-auto w-full max-w-7xl">
-          <div class="section-heading">
-            <h2>Media and scale helpers for product surfaces.</h2>
+      <section id="media" class="section-block alternate" data-section>
+        <div class="shell section-grid reverse">
+          <div class="section-intro">
+            <h2>Media previews and fixed canvases with stable proportions.</h2>
             <p>
-              Build polished previews, posters, dashboards, and fixed-ratio
-              canvases without reimplementing the same sizing logic.
+              Compose richer visual surfaces without giving up predictable
+              sizing, real markup, or framework-neutral delivery.
             </p>
           </div>
 
-          <div
-            class="mt-10 grid gap-5 lg:grid-cols-[minmax(0,1.05fr)_minmax(340px,0.95fr)]"
-          >
-            <article class="demo-panel">
-              <div class="demo-label">
+          <div class="demo-gallery">
+            <article class="demo-card media-card">
+              <div class="demo-heading">
                 <span>ambient-image</span>
-                <strong>Generate a soft backdrop from the image</strong>
+                <strong>Image-led atmosphere</strong>
               </div>
               <ambient-image
                 src="./image.webp"
                 alt="Abstract interface banner"
                 variant="blur"
-                image-radius="18px"
+                backdrop-blur="32px"
+                image-radius="8px"
                 class="ambient-demo"
+                data-ambient-demo
               ></ambient-image>
+              <p class="metric">
+                <span>Ambient</span>
+                <strong data-ambient-color>sampling</strong>
+              </p>
             </article>
 
-            <article class="demo-panel">
-              <div class="demo-label">
+            <article class="demo-card canvas-card">
+              <div class="demo-heading">
                 <span>screen-fit</span>
-                <strong>Scale fixed canvases into fluid containers</strong>
+                <strong>Design canvas scaling</strong>
               </div>
-              <screen-fit draft-width="640" draft-height="360" class="fit-demo">
+              <screen-fit
+                draft-width="640"
+                draft-height="360"
+                class="fit-demo"
+                data-fit-demo
+              >
                 <article class="fit-canvas">
                   <span>640 x 360</span>
                   <strong>Design canvas</strong>
                 </article>
               </screen-fit>
+              <p class="metric">
+                <span>Scale</span>
+                <strong data-scale-value>pending</strong>
+              </p>
             </article>
           </div>
         </div>
       </section>
 
-      <section
-        id="panels"
-        class="border-t border-line/70 bg-[#eef3f7] px-5 py-16 sm:px-8"
-      >
-        <div class="mx-auto w-full max-w-7xl">
-          <div class="section-heading">
-            <h2>Interaction patterns for dense interfaces.</h2>
+      <section id="interaction" class="section-block" data-section>
+        <div class="shell section-grid">
+          <div class="section-intro">
+            <h2>Interaction primitives for dense product surfaces.</h2>
             <p>
-              Keep long lists fast and let users rebalance work areas without
-              giving up native markup.
+              Keep long content responsive and let people rebalance work areas
+              without adding a framework dependency.
             </p>
           </div>
 
-          <div class="mt-10 grid gap-5 lg:grid-cols-2">
-            <article class="demo-panel">
-              <div class="demo-label">
+          <div class="demo-gallery">
+            <article class="demo-card">
+              <div class="demo-heading">
                 <span>virtual-list</span>
-                <strong>Only show the visible row range</strong>
+                <strong>Visible range rendering</strong>
               </div>
-              <virtual-list height="248" item-height="44" class="list-demo">
+              <virtual-list
+                height="256"
+                item-height="44"
+                class="list-demo"
+                data-list-demo
+              >
                 <article class="list-row">
-                  <span>Row 0001</span><small>visible range</small>
+                  <span>Item 0001</span><small>visible</small>
                 </article>
                 <article class="list-row">
-                  <span>Row 0002</span><small>visible range</small>
+                  <span>Item 0002</span><small>visible</small>
                 </article>
                 <article class="list-row">
-                  <span>Row 0003</span><small>visible range</small>
+                  <span>Item 0003</span><small>visible</small>
                 </article>
                 <article class="list-row">
-                  <span>Row 0004</span><small>visible range</small>
+                  <span>Item 0004</span><small>visible</small>
                 </article>
                 <article class="list-row">
-                  <span>Row 0005</span><small>visible range</small>
+                  <span>Item 0005</span><small>visible</small>
                 </article>
                 <article class="list-row">
-                  <span>Row 0006</span><small>visible range</small>
+                  <span>Item 0006</span><small>overscan</small>
                 </article>
                 <article class="list-row">
-                  <span>Row 0007</span><small>overscan</small>
+                  <span>Item 0007</span><small>overscan</small>
                 </article>
                 <article class="list-row">
-                  <span>Row 0008</span><small>overscan</small>
+                  <span>Item 0008</span><small>overscan</small>
                 </article>
                 <article class="list-row">
-                  <span>Row 0009</span><small>overscan</small>
+                  <span>Item 0009</span><small>overscan</small>
                 </article>
                 <article class="list-row">
-                  <span>Row 0010</span><small>overscan</small>
+                  <span>Item 0010</span><small>overscan</small>
                 </article>
               </virtual-list>
+              <p class="metric">
+                <span>Range</span>
+                <strong data-range-value>waiting</strong>
+              </p>
             </article>
 
-            <article class="demo-panel">
-              <div class="demo-label">
+            <article class="demo-card wide">
+              <div class="demo-heading">
                 <span>resizable-panel</span>
-                <strong>Drag the divider to rebalance panes</strong>
+                <strong>Rebalance panes</strong>
               </div>
-              <resizable-panel size="44" min="26" max="74" class="panel-demo">
-                <div slot="start" class="panel-pane primary-pane">
-                  <span>Outline</span>
-                  <strong>Navigation and filters</strong>
+              <resizable-panel
+                size="44"
+                min="26"
+                max="74"
+                class="panel-demo"
+                data-panel-demo
+              >
+                <div slot="start" class="panel-pane start-pane">
+                  <span>Navigation</span>
+                  <strong>Filters and outline</strong>
                 </div>
-                <div slot="end" class="panel-pane secondary-pane">
+                <div slot="end" class="panel-pane end-pane">
                   <span>Workspace</span>
                   <strong>Details and preview</strong>
                 </div>
               </resizable-panel>
+              <p class="metric">
+                <span>Primary pane</span>
+                <strong data-panel-size>44%</strong>
+              </p>
             </article>
           </div>
         </div>
@@ -297,5 +288,6 @@
     </main>
 
     <script src="../packages/core/dist/index.iife.js"></script>
+    <script src="./playground.js"></script>
   </body>
 </html>

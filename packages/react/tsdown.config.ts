@@ -11,6 +11,7 @@ export default defineConfig({
       "react/jsx-runtime",
       "react-dom",
       "@layout-kit/core",
+      "@lit/react",
     ],
   },
   platform: "browser",

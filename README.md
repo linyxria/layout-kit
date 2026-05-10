@@ -123,6 +123,7 @@ previews.
   src="/banner.png"
   alt="Event banner"
   image-radius="12px"
+  backdrop-blur="32px"
   background-color="#15110f"
 ></ambient-image>
 ```
@@ -205,7 +206,11 @@ export function Demo() {
         ))}
       </VirtualList>
 
-      <AmbientImage src="/banner.png" alt="Event banner" />
+      <AmbientImage
+        src="/banner.png"
+        alt="Event banner"
+        backdropBlur="32px"
+      />
 
       <ResizablePanel size={40} min={20} max={80}>
         <section slot="start">Navigation</section>
@@ -249,7 +254,11 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
     <article v-for="row in rows" :key="row">{{ row }}</article>
   </VirtualList>
 
-  <AmbientImage src="/banner.png" alt="Event banner" />
+  <AmbientImage
+    src="/banner.png"
+    alt="Event banner"
+    backdrop-blur="32px"
+  />
 
   <ResizablePanel :size="40" :min="20" :max="80">
     <section slot="start">Navigation</section>
@@ -299,6 +308,7 @@ The playground loads the built core bundle from
 Useful commands:
 
 ```bash
+pnpm test
 pnpm lint
 pnpm format
 ```

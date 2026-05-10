@@ -150,7 +150,7 @@ export class AmbientImage extends LitElement {
   @property({ attribute: "fade-size" })
   fadeSize = "14%"
 
-  @property({ attribute: "blur" })
+  @property({ attribute: "backdrop-blur" })
   backdropBlur = "36px"
 
   @property({ attribute: "image-radius" })

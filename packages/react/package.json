@@ -1,6 +1,6 @@
 {
   "name": "@layout-kit/react",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "files": [
     "dist"
@@ -16,14 +16,15 @@
     }
   },
   "scripts": {
-    "build": "tsdown"
+    "build": "tsdown",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@lit/react": "^1.0.7",
-    "@layout-kit/core": "workspace:*"
+    "@layout-kit/core": "workspace:*",
+    "@lit/react": "^1.0.8"
   },
   "devDependencies": {
-    "@types/react": "^19.1.2"
+    "@types/react": "^19.2.14"
   },
   "peerDependencies": {
     "react": "^19.0.0",
