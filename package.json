@@ -4,6 +4,10 @@
     "build": "pnpm --filter @layout-kit/core build && pnpm --filter @layout-kit/react build && pnpm --filter @layout-kit/vue build",
     "lint": "eslint .",
     "test": "pnpm --filter @layout-kit/core test && pnpm --filter @layout-kit/react test && pnpm --filter @layout-kit/vue test",
+    "publish:core": "npm publish ./packages/core --access public",
+    "publish:react": "npm publish ./packages/react --access public",
+    "publish:vue": "npm publish ./packages/vue --access public",
+    "publish": "pnpm publish:core && pnpm publish:react && pnpm publish:vue",
     "format": "prettier . --write"
   },
   "devDependencies": {

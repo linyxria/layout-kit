@@ -312,3 +312,12 @@ pnpm test
 pnpm lint
 pnpm format
 ```
+
+Publish all packages after tests, lint, and build pass:
+
+```bash
+pnpm run publish
+```
+
+This publishes `@layout-kit/core`, then `@layout-kit/react`, then
+`@layout-kit/vue` with `--access public`.

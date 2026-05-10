@@ -1,6 +1,15 @@
 {
   "name": "@layout-kit/react",
-  "version": "0.1.1",
+  "version": "0.1.2",
+  "license": "MIT",
+  "homepage": "https://github.com/linyxria/layout-kit",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/linyxria/layout-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/linyxria/layout-kit/issues"
+  },
   "type": "module",
   "files": [
     "dist"
