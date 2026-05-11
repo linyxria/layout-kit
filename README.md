@@ -16,15 +16,18 @@ packages keep the ergonomics of React and Vue components.
 
 ## Installation
 
+Install the core package when you want to use the Web Components directly:
+
 ```bash
 pnpm add @layout-kit/core
 ```
 
-For framework projects, install the matching adapter:
+For framework projects, install only the matching adapter. The core package is
+installed automatically as a dependency:
 
 ```bash
-pnpm add @layout-kit/core @layout-kit/react
-pnpm add @layout-kit/core @layout-kit/vue
+pnpm add @layout-kit/react
+pnpm add @layout-kit/vue
 ```
 
 ## Quick Start
@@ -47,6 +50,23 @@ Then use the elements directly in HTML:
 
 ## Components
 
+### AdaptiveStack
+
+Switches between row and column layout based on the host container width.
+
+```html
+<adaptive-stack breakpoint="720" gap="16" align="center">
+  <aside>Filters</aside>
+  <main>Results</main>
+</adaptive-stack>
+```
+
+```ts
+document.querySelector("adaptive-stack")?.addEventListener("stack", (event) => {
+  console.log(event.detail.mode)
+})
+```
+
 ### AutoGrid
 
 Creates a responsive grid whose column count follows the available container
@@ -64,6 +84,69 @@ width.
 document.querySelector("auto-grid")?.addEventListener("grid", (event) => {
   console.log(event.detail.columns)
 })
+```
+
+### FlowStack
+
+Creates consistent vertical rhythm for content groups.
+
+```html
+<flow-stack gap="20" align="stretch">
+  <header>Section title</header>
+  <article>Primary content</article>
+  <footer>Actions</footer>
+</flow-stack>
+```
+
+### ClusterLayout
+
+Wraps inline items while preserving a predictable gap, alignment, and
+justification.
+
+```html
+<cluster-layout gap="12" align="center" justify="space-between">
+  <span>Status</span>
+  <button>Save</button>
+  <button>Publish</button>
+</cluster-layout>
+```
+
+### CenterBox
+
+Centers content in a readable max-width container.
+
+```html
+<center-box max-width="720px" padding="24px" center-text>
+  <h1>Readable content</h1>
+  <p>Constrained copy without page-specific wrapper CSS.</p>
+</center-box>
+```
+
+### SidebarLayout
+
+Composes sidebar and content slots, then collapses into one column below the
+configured container width.
+
+```html
+<sidebar-layout sidebar-width="260px" gap="24" collapse-at="720">
+  <aside slot="sidebar">Filters</aside>
+  <main slot="content">Results</main>
+</sidebar-layout>
+```
+
+Use `side="right"` to place the sidebar after the content on wider containers.
+
+### CoverLayout
+
+Builds a full-height section with optional header and footer slots plus a main
+region that can be vertically centered.
+
+```html
+<cover-layout min-height="100vh" gap="24" center>
+  <header slot="header">Navigation</header>
+  <main>Centered content</main>
+  <footer slot="footer">Footer</footer>
+</cover-layout>
 ```
 
 ### MasonryLayout
@@ -111,6 +194,39 @@ Use `direction="vertical"` for stacked panes:
 </resizable-panel>
 ```
 
+### ReelLayout
+
+Creates a horizontal scrolling row for cards, media, and compact panels.
+
+```html
+<reel-layout item-width="220px" gap="16" snap>
+  <article>Release card</article>
+  <article>Preview card</article>
+  <article>Status card</article>
+</reel-layout>
+```
+
+### ScrollShadow
+
+Wraps scrollable content and shows edge fades only where more content is
+available.
+
+```html
+<scroll-shadow direction="vertical" shadow-size="32px">
+  <div style="max-height: 240px">Long content</div>
+</scroll-shadow>
+```
+
+### StickyBox
+
+Keeps a toolbar, sidebar, or summary panel pinned inside its scroll container.
+
+```html
+<sticky-box offset="16px" z-index="10">
+  <nav>Section actions</nav>
+</sticky-box>
+```
+
 ### AmbientImage
 
 Displays an image with an ambient background generated from the same source
@@ -153,6 +269,16 @@ disable automatic color extraction and pass a color manually:
 ></ambient-image>
 ```
 
+### AspectBox
+
+Keeps slotted media or content at a stable aspect ratio.
+
+```html
+<aspect-box ratio="4:3" fit="cover" position="center">
+  <img src="/preview.png" alt="Preview" />
+</aspect-box>
+```
+
 ### ScreenFit
 
 Scales a fixed-size design canvas into its parent container. It is useful for
@@ -179,10 +305,20 @@ fill the container and allow cropping:
 
 ```tsx
 import {
+  AdaptiveStack,
   AmbientImage,
+  AspectBox,
   AutoGrid,
+  CenterBox,
+  ClusterLayout,
+  CoverLayout,
+  FlowStack,
+  ReelLayout,
   ResizablePanel,
   ScreenFit,
+  ScrollShadow,
+  SidebarLayout,
+  StickyBox,
   VirtualList,
 } from "@layout-kit/react"
 
@@ -191,6 +327,15 @@ export function Demo() {
 
   return (
     <>
+      <AdaptiveStack
+        breakpoint={720}
+        gap={16}
+        onStack={(event) => console.log(event.detail.mode)}
+      >
+        <aside>Filters</aside>
+        <main>Results</main>
+      </AdaptiveStack>
+
       <AutoGrid
         columnWidth={180}
         gap={16}
@@ -199,6 +344,35 @@ export function Demo() {
         <article>Card A</article>
         <article>Card B</article>
       </AutoGrid>
+
+      <FlowStack gap={20}>
+        <header>Section title</header>
+        <article>Primary content</article>
+      </FlowStack>
+
+      <ClusterLayout gap={12} align="center" justify="space-between">
+        <span>Status</span>
+        <button>Save</button>
+      </ClusterLayout>
+
+      <CenterBox maxWidth="720px" padding="24px" centerText>
+        <article>Readable content</article>
+      </CenterBox>
+
+      <SidebarLayout
+        sidebarWidth="260px"
+        collapseAt={720}
+        onSidebar={(event) => console.log(event.detail.collapsed)}
+      >
+        <aside slot="sidebar">Filters</aside>
+        <main slot="content">Results</main>
+      </SidebarLayout>
+
+      <CoverLayout minHeight="420px" gap={24} center>
+        <header slot="header">Header</header>
+        <main>Centered content</main>
+        <footer slot="footer">Footer</footer>
+      </CoverLayout>
 
       <VirtualList height={320} itemHeight={48}>
         {rows.map((row) => (
@@ -212,10 +386,27 @@ export function Demo() {
         backdropBlur="32px"
       />
 
+      <AspectBox ratio="16:9">
+        <img src="/preview.png" alt="Preview" />
+      </AspectBox>
+
+      <ReelLayout itemWidth="220px" gap={16} snap>
+        <article>Card A</article>
+        <article>Card B</article>
+      </ReelLayout>
+
       <ResizablePanel size={40} min={20} max={80}>
         <section slot="start">Navigation</section>
         <section slot="end">Preview</section>
       </ResizablePanel>
+
+      <ScrollShadow direction="vertical" shadowSize="32px">
+        <section>Long content</section>
+      </ScrollShadow>
+
+      <StickyBox offset="16px" zIndex={10}>
+        <nav>Actions</nav>
+      </StickyBox>
 
       <ScreenFit draftWidth={1920} draftHeight={1080}>
         <main>Dashboard content</main>
@@ -230,10 +421,20 @@ export function Demo() {
 ```vue
 <script setup lang="ts">
 import {
+  AdaptiveStack,
   AmbientImage,
+  AspectBox,
   AutoGrid,
+  CenterBox,
+  ClusterLayout,
+  CoverLayout,
+  FlowStack,
+  ReelLayout,
   ResizablePanel,
   ScreenFit,
+  ScrollShadow,
+  SidebarLayout,
+  StickyBox,
   VirtualList,
 } from "@layout-kit/vue"
 
@@ -241,6 +442,15 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
 </script>
 
 <template>
+  <AdaptiveStack
+    :breakpoint="720"
+    :gap="16"
+    :on-stack="(event) => console.log(event.detail.mode)"
+  >
+    <aside>Filters</aside>
+    <main>Results</main>
+  </AdaptiveStack>
+
   <AutoGrid
     :column-width="180"
     :gap="16"
@@ -249,6 +459,35 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
     <article>Card A</article>
     <article>Card B</article>
   </AutoGrid>
+
+  <FlowStack :gap="20">
+    <header>Section title</header>
+    <article>Primary content</article>
+  </FlowStack>
+
+  <ClusterLayout :gap="12" align="center" justify="space-between">
+    <span>Status</span>
+    <button>Save</button>
+  </ClusterLayout>
+
+  <CenterBox max-width="720px" padding="24px" center-text>
+    <article>Readable content</article>
+  </CenterBox>
+
+  <SidebarLayout
+    sidebar-width="260px"
+    :collapse-at="720"
+    :on-sidebar="(event) => console.log(event.detail.collapsed)"
+  >
+    <aside slot="sidebar">Filters</aside>
+    <main slot="content">Results</main>
+  </SidebarLayout>
+
+  <CoverLayout min-height="420px" :gap="24" center>
+    <header slot="header">Header</header>
+    <main>Centered content</main>
+    <footer slot="footer">Footer</footer>
+  </CoverLayout>
 
   <VirtualList :height="320" :item-height="48">
     <article v-for="row in rows" :key="row">{{ row }}</article>
@@ -260,10 +499,27 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
     backdrop-blur="32px"
   />
 
+  <AspectBox ratio="16:9">
+    <img src="/preview.png" alt="Preview" />
+  </AspectBox>
+
+  <ReelLayout item-width="220px" :gap="16" snap>
+    <article>Card A</article>
+    <article>Card B</article>
+  </ReelLayout>
+
   <ResizablePanel :size="40" :min="20" :max="80">
     <section slot="start">Navigation</section>
     <section slot="end">Preview</section>
   </ResizablePanel>
+
+  <ScrollShadow direction="vertical" shadow-size="32px">
+    <section>Long content</section>
+  </ScrollShadow>
+
+  <StickyBox offset="16px" :z-index="10">
+    <nav>Actions</nav>
+  </StickyBox>
 
   <ScreenFit :draft-width="1920" :draft-height="1080">
     <main>Dashboard content</main>
@@ -277,15 +533,20 @@ All core elements dispatch native `CustomEvent` events:
 
 | Element | Event | Detail |
 | --- | --- | --- |
+| `adaptive-stack` | `stack` | `{ mode, inlineSize }` |
 | `auto-grid` | `grid` | `{ columns }` |
 | `masonry-layout` | `layout` | `{ columns, height }` |
+| `sidebar-layout` | `sidebar` | `{ collapsed, inlineSize }` |
 | `virtual-list` | `range` | `{ start, end }` |
+| `reel-layout` | `reel` | `{ overflow, scrollLeft }` |
 | `resizable-panel` | `resize` | `{ size }` |
+| `scroll-shadow` | `overflow` | `{ top, right, bottom, left }` |
 | `screen-fit` | `scale` | `{ scale, inlineSize, blockSize }` |
 | `ambient-image` | `ambient` | `{ color, inlineSize, blockSize }` |
 
-React wrappers expose `onAmbient`, `onGrid`, `onLayout`, `onRange`, `onResize`,
-and `onScale`. Vue wrappers expose the same callback props.
+React wrappers expose `onAmbient`, `onGrid`, `onLayout`, `onOverflow`,
+`onRange`, `onReel`, `onResize`, `onScale`, `onSidebar`, and `onStack`. Vue
+wrappers expose the same callback props.
 
 ## Local Development
 

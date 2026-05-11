@@ -1,15 +1,25 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 describe("@layout-kit/react", () => {
+  let AdaptiveStack: typeof import("./index").AdaptiveStack
   let AmbientImage: typeof import("./index").AmbientImage
+  let AspectBox: typeof import("./index").AspectBox
   let AutoGrid: typeof import("./index").AutoGrid
+  let CenterBox: typeof import("./index").CenterBox
+  let ClusterLayout: typeof import("./index").ClusterLayout
   let container: HTMLDivElement
+  let CoverLayout: typeof import("./index").CoverLayout
   let createRoot: typeof import("react-dom/client").createRoot
+  let FlowStack: typeof import("./index").FlowStack
   let MasonryLayout: typeof import("./index").MasonryLayout
+  let ReelLayout: typeof import("./index").ReelLayout
   let React: typeof import("react")
   let ResizablePanel: typeof import("./index").ResizablePanel
   let root: import("react-dom/client").Root
   let ScreenFit: typeof import("./index").ScreenFit
+  let ScrollShadow: typeof import("./index").ScrollShadow
+  let SidebarLayout: typeof import("./index").SidebarLayout
+  let StickyBox: typeof import("./index").StickyBox
   let VirtualList: typeof import("./index").VirtualList
   let act: typeof import("react").act
 
@@ -36,11 +46,21 @@ describe("@layout-kit/react", () => {
     ;({ default: React, act } = await import("react"))
     ;({ createRoot } = await import("react-dom/client"))
     ;({
+      AdaptiveStack,
       AmbientImage,
+      AspectBox,
       AutoGrid,
+      CenterBox,
+      ClusterLayout,
+      CoverLayout,
+      FlowStack,
       MasonryLayout,
+      ReelLayout,
       ResizablePanel,
       ScreenFit,
+      ScrollShadow,
+      SidebarLayout,
+      StickyBox,
       VirtualList,
     } = await import("./index"))
     container = document.createElement("div")
@@ -74,6 +94,42 @@ describe("@layout-kit/react", () => {
     await element.updateComplete
     return element
   }
+
+  it("maps AdaptiveStack props and events", async () => {
+    const onStack = vi.fn()
+    await render(
+      <AdaptiveStack
+        breakpoint={720}
+        gap={20}
+        align="center"
+        justify="space-between"
+        reverse
+        onStack={onStack}
+      >
+        <article>stack</article>
+      </AdaptiveStack>,
+    )
+
+    const element = await waitForElement("adaptive-stack")
+    onStack.mockClear()
+    element.dispatchEvent(
+      new CustomEvent("stack", {
+        bubbles: true,
+        composed: true,
+        detail: { inlineSize: 600, mode: "column" },
+      }),
+    )
+
+    expect(element).toMatchObject({
+      align: "center",
+      breakpoint: 720,
+      gap: 20,
+      justify: "space-between",
+      reverse: true,
+    })
+    expect(element.textContent).toBe("stack")
+    expect(onStack).toHaveBeenCalledOnce()
+  })
 
   it("maps AmbientImage props and events", async () => {
     const onAmbient = vi.fn()
@@ -124,6 +180,95 @@ describe("@layout-kit/react", () => {
       variant: "fade",
     })
     expect(onAmbient).toHaveBeenCalledOnce()
+  })
+
+  it("maps AspectBox props and slots", async () => {
+    await render(
+      <AspectBox ratio="4:3" fit="contain" position="top left">
+        <img alt="" />
+      </AspectBox>,
+    )
+
+    const element = await waitForElement("aspect-box")
+
+    expect(element).toMatchObject({
+      fit: "contain",
+      position: "top left",
+      ratio: "4:3",
+    })
+    expect(element.querySelector("img")).not.toBeNull()
+  })
+
+  it("maps CenterBox props and slots", async () => {
+    await render(
+      <CenterBox maxWidth="960px" padding="24px" centerText>
+        <article>center</article>
+      </CenterBox>,
+    )
+
+    const element = await waitForElement("center-box")
+
+    expect(element).toMatchObject({
+      centerText: true,
+      maxWidth: "960px",
+      padding: "24px",
+    })
+    expect(element.textContent).toBe("center")
+  })
+
+  it("maps ClusterLayout props and slots", async () => {
+    await render(
+      <ClusterLayout gap={10} align="baseline" justify="space-between">
+        <button>Save</button>
+      </ClusterLayout>,
+    )
+
+    const element = await waitForElement("cluster-layout")
+
+    expect(element).toMatchObject({
+      align: "baseline",
+      gap: 10,
+      justify: "space-between",
+    })
+    expect(element.textContent).toBe("Save")
+  })
+
+  it("maps CoverLayout props and slots", async () => {
+    await render(
+      <CoverLayout minHeight="480px" gap={18} center>
+        <header slot="header">header</header>
+        <main>main</main>
+        <footer slot="footer">footer</footer>
+      </CoverLayout>,
+    )
+
+    const element = await waitForElement("cover-layout")
+
+    expect(element).toMatchObject({
+      center: true,
+      gap: 18,
+      minHeight: "480px",
+    })
+    expect(element.querySelector('[slot="header"]')?.textContent).toBe("header")
+    expect(element.querySelector("main")?.textContent).toBe("main")
+    expect(element.querySelector('[slot="footer"]')?.textContent).toBe("footer")
+  })
+
+  it("maps FlowStack props and slots", async () => {
+    await render(
+      <FlowStack gap={20} align="center" justify="space-between">
+        <article>flow</article>
+      </FlowStack>,
+    )
+
+    const element = await waitForElement("flow-stack")
+
+    expect(element).toMatchObject({
+      align: "center",
+      gap: 20,
+      justify: "space-between",
+    })
+    expect(element.textContent).toBe("flow")
   })
 
   it("maps ScreenFit props and events", async () => {
@@ -222,6 +367,33 @@ describe("@layout-kit/react", () => {
     expect(onRange).toHaveBeenCalledOnce()
   })
 
+  it("maps ReelLayout props and events", async () => {
+    const onReel = vi.fn()
+    await render(
+      <ReelLayout gap={14} itemWidth="180px" snap onReel={onReel}>
+        <article>card</article>
+      </ReelLayout>,
+    )
+
+    const element = await waitForElement("reel-layout")
+    onReel.mockClear()
+    element.dispatchEvent(
+      new CustomEvent("reel", {
+        bubbles: true,
+        composed: true,
+        detail: { overflow: true, scrollLeft: 10 },
+      }),
+    )
+
+    expect(element).toMatchObject({
+      gap: 14,
+      itemWidth: "180px",
+      snap: true,
+    })
+    expect(element.textContent).toBe("card")
+    expect(onReel).toHaveBeenCalledOnce()
+  })
+
   it("maps ResizablePanel props, slots, and events", async () => {
     const onResize = vi.fn()
     await render(
@@ -256,5 +428,94 @@ describe("@layout-kit/react", () => {
     expect(element.querySelector('[slot="start"]')?.textContent).toBe("top")
     expect(element.querySelector('[slot="end"]')?.textContent).toBe("bottom")
     expect(onResize).toHaveBeenCalledOnce()
+  })
+
+  it("maps ScrollShadow props and events", async () => {
+    const onOverflow = vi.fn()
+    await render(
+      <ScrollShadow
+        direction="both"
+        shadowSize="32px"
+        shadowColor="rgb(1 2 3 / 40%)"
+        onOverflow={onOverflow}
+      >
+        <article>overflow</article>
+      </ScrollShadow>,
+    )
+
+    const element = await waitForElement("scroll-shadow")
+    onOverflow.mockClear()
+    element.dispatchEvent(
+      new CustomEvent("overflow", {
+        bubbles: true,
+        composed: true,
+        detail: { bottom: true, left: false, right: false, top: false },
+      }),
+    )
+
+    expect(element).toMatchObject({
+      direction: "both",
+      shadowColor: "rgb(1 2 3 / 40%)",
+      shadowSize: "32px",
+    })
+    expect(element.textContent).toBe("overflow")
+    expect(onOverflow).toHaveBeenCalledOnce()
+  })
+
+  it("maps SidebarLayout props, slots, and events", async () => {
+    const onSidebar = vi.fn()
+    await render(
+      <SidebarLayout
+        side="right"
+        sidebarWidth="220px"
+        gap={18}
+        collapseAt={640}
+        onSidebar={onSidebar}
+      >
+        <aside slot="sidebar">sidebar</aside>
+        <main slot="content">content</main>
+      </SidebarLayout>,
+    )
+
+    const element = await waitForElement("sidebar-layout")
+    onSidebar.mockClear()
+    element.dispatchEvent(
+      new CustomEvent("sidebar", {
+        bubbles: true,
+        composed: true,
+        detail: { collapsed: true, inlineSize: 520 },
+      }),
+    )
+
+    expect(element).toMatchObject({
+      collapseAt: 640,
+      gap: 18,
+      side: "right",
+      sidebarWidth: "220px",
+    })
+    expect(element.querySelector('[slot="sidebar"]')?.textContent).toBe(
+      "sidebar",
+    )
+    expect(element.querySelector('[slot="content"]')?.textContent).toBe(
+      "content",
+    )
+    expect(onSidebar).toHaveBeenCalledOnce()
+  })
+
+  it("maps StickyBox props and slots", async () => {
+    await render(
+      <StickyBox offset="16px" position="bottom" zIndex={20}>
+        <article>sticky</article>
+      </StickyBox>,
+    )
+
+    const element = await waitForElement("sticky-box")
+
+    expect(element).toMatchObject({
+      offset: "16px",
+      position: "bottom",
+      zIndex: 20,
+    })
+    expect(element.textContent).toBe("sticky")
   })
 })

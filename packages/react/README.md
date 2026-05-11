@@ -5,7 +5,7 @@ React wrappers for Layout Kit Web Components.
 ## Installation
 
 ```bash
-pnpm add @layout-kit/core @layout-kit/react
+pnpm add @layout-kit/react
 ```
 
 ## Usage

@@ -5,7 +5,7 @@ Vue 3 wrappers for Layout Kit Web Components.
 ## Installation
 
 ```bash
-pnpm add @layout-kit/core @layout-kit/vue
+pnpm add @layout-kit/vue
 ```
 
 ## Usage

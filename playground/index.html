@@ -44,7 +44,7 @@
           <div class="hero-showcase" aria-label="Live Layout Kit preview">
             <div class="showcase-copy">
               <span>Live composition</span>
-              <strong>Six primitives, one native surface.</strong>
+              <strong>Sixteen primitives, one native surface.</strong>
             </div>
 
             <div class="showcase-stage">
@@ -71,8 +71,8 @@
                   <strong>Fixed canvas scale</strong>
                 </article>
                 <article>
-                  <span>AmbientImage</span>
-                  <strong>Media atmosphere</strong>
+                  <span>SidebarLayout</span>
+                  <strong>Intrinsic structure</strong>
                 </article>
               </auto-grid>
             </div>
@@ -91,6 +91,91 @@
           </div>
 
           <div class="demo-gallery">
+            <article class="demo-card wide">
+              <div class="demo-heading">
+                <span>cover-layout</span>
+                <strong>Section frame</strong>
+              </div>
+              <cover-layout
+                min-height="300px"
+                gap="12"
+                center
+                class="cover-demo"
+              >
+                <div slot="header" class="cover-bar">Header slot</div>
+                <center-box max-width="520px" center-text>
+                  <flow-stack gap="10" align="center" class="center-demo">
+                    <span>center-box + flow-stack</span>
+                    <strong>Readable center content</strong>
+                  </flow-stack>
+                </center-box>
+                <cluster-layout
+                  slot="footer"
+                  gap="8"
+                  justify="center"
+                  class="cluster-demo"
+                >
+                  <span>Draft</span>
+                  <span>Preview</span>
+                  <span>Publish</span>
+                </cluster-layout>
+              </cover-layout>
+            </article>
+
+            <article class="demo-card wide">
+              <div class="demo-heading">
+                <span>sidebar-layout</span>
+                <strong>Intrinsic sidebar</strong>
+              </div>
+              <sidebar-layout
+                sidebar-width="180px"
+                gap="12"
+                collapse-at="620"
+                class="sidebar-demo"
+                data-sidebar-demo
+              >
+                <aside slot="sidebar" class="sidebar-pane">
+                  <span>Filters</span>
+                  <strong>Scope and status</strong>
+                </aside>
+                <main slot="content" class="sidebar-content">
+                  <span>Results</span>
+                  <strong>Container-aware content</strong>
+                </main>
+              </sidebar-layout>
+              <p class="metric">
+                <span>Collapsed</span>
+                <strong data-sidebar-state>waiting</strong>
+              </p>
+            </article>
+
+            <article class="demo-card wide">
+              <div class="demo-heading">
+                <span>adaptive-stack</span>
+                <strong>Container-aware direction</strong>
+              </div>
+              <adaptive-stack
+                breakpoint="680"
+                gap="12"
+                align="stretch"
+                class="stack-demo"
+                data-stack-demo
+              >
+                <article class="stack-panel stack-primary">
+                  <span>Content</span>
+                  <strong>Primary workspace</strong>
+                </article>
+                <article class="stack-panel stack-secondary">
+                  <span>Aside</span>
+                  <strong>Context panel</strong>
+                </article>
+              </adaptive-stack>
+              <p class="metric">
+                <span>Mode</span>
+                <strong data-stack-mode>waiting</strong>
+              </p>
+            </article>
+
             <article class="demo-card wide">
               <div class="demo-heading">
                 <span>auto-grid</span>
@@ -172,6 +257,16 @@
               </p>
             </article>
 
+            <article class="demo-card">
+              <div class="demo-heading">
+                <span>aspect-box</span>
+                <strong>Stable media ratio</strong>
+              </div>
+              <aspect-box ratio="4:3" fit="cover" class="aspect-demo">
+                <img src="./image.webp" alt="Abstract interface crop" />
+              </aspect-box>
+            </article>
+
             <article class="demo-card canvas-card">
               <div class="demo-heading">
                 <span>screen-fit</span>
@@ -208,6 +303,55 @@
           </div>
 
           <div class="demo-gallery">
+            <article class="demo-card wide">
+              <div class="demo-heading">
+                <span>reel-layout</span>
+                <strong>Horizontal card rail</strong>
+              </div>
+              <reel-layout
+                item-width="210px"
+                gap="12"
+                snap
+                class="reel-demo"
+                data-reel-demo
+              >
+                <article class="reel-card">Release notes</article>
+                <article class="reel-card">Media preview</article>
+                <article class="reel-card">Usage recipe</article>
+                <article class="reel-card">Status panel</article>
+              </reel-layout>
+              <p class="metric">
+                <span>Overflow</span>
+                <strong data-reel-overflow>waiting</strong>
+              </p>
+            </article>
+
+            <article class="demo-card">
+              <div class="demo-heading">
+                <span>scroll-shadow</span>
+                <strong>Overflow edge hints</strong>
+              </div>
+              <scroll-shadow
+                direction="vertical"
+                shadow-size="34px"
+                class="shadow-demo"
+                data-shadow-demo
+              >
+                <div class="shadow-content">
+                  <p>Backlog grooming</p>
+                  <p>Component QA</p>
+                  <p>Docs pass</p>
+                  <p>Release checklist</p>
+                  <p>Package verification</p>
+                  <p>Playground review</p>
+                </div>
+              </scroll-shadow>
+              <p class="metric">
+                <span>More content</span>
+                <strong data-shadow-overflow>waiting</strong>
+              </p>
+            </article>
+
             <article class="demo-card">
               <div class="demo-heading">
                 <span>virtual-list</span>
@@ -281,6 +425,25 @@
                 <span>Primary pane</span>
                 <strong data-panel-size>44%</strong>
               </p>
+            </article>
+
+            <article class="demo-card">
+              <div class="demo-heading">
+                <span>sticky-box</span>
+                <strong>Pinned local actions</strong>
+              </div>
+              <div class="sticky-demo">
+                <sticky-box offset="12px" z-index="2">
+                  <div class="sticky-toolbar">Review queue</div>
+                </sticky-box>
+                <div class="sticky-content">
+                  <p>Incoming changes</p>
+                  <p>Visual checks</p>
+                  <p>API wrappers</p>
+                  <p>Release notes</p>
+                  <p>Package build</p>
+                </div>
+              </div>
             </article>
           </div>
         </div>

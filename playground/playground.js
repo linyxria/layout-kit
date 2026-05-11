@@ -12,6 +12,14 @@ document.addEventListener("grid", (event) => {
   setText("[data-grid-count]", String(event.detail.columns))
 })
 
+document.addEventListener("stack", (event) => {
+  setText("[data-stack-mode]", event.detail.mode)
+})
+
+document.addEventListener("sidebar", (event) => {
+  setText("[data-sidebar-state]", event.detail.collapsed ? "yes" : "no")
+})
+
 document.addEventListener("scale", (event) => {
   setText("[data-scale-value]", formatScale(event.detail.scale))
 })
@@ -26,6 +34,20 @@ document.addEventListener("resize", (event) => {
 
 document.addEventListener("ambient", (event) => {
   setText("[data-ambient-color]", event.detail.color)
+})
+
+document.addEventListener("reel", (event) => {
+  setText("[data-reel-overflow]", event.detail.overflow ? "yes" : "no")
+})
+
+document.addEventListener("overflow", (event) => {
+  const hasOverflow =
+    event.detail.top ||
+    event.detail.right ||
+    event.detail.bottom ||
+    event.detail.left
+
+  setText("[data-shadow-overflow]", hasOverflow ? "yes" : "no")
 })
 
 const sectionLinks = new Map(

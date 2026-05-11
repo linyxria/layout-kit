@@ -2,11 +2,21 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { createApp, h, nextTick } from "vue"
 
 import {
+  AdaptiveStack,
   AmbientImage,
+  AspectBox,
   AutoGrid,
+  CenterBox,
+  ClusterLayout,
+  CoverLayout,
+  FlowStack,
   MasonryLayout,
+  ReelLayout,
   ResizablePanel,
   ScreenFit,
+  ScrollShadow,
+  SidebarLayout,
+  StickyBox,
   VirtualList,
 } from "./index"
 
@@ -47,6 +57,43 @@ describe("@layout-kit/vue", () => {
     app.mount(container)
     return app
   }
+
+  it("maps AdaptiveStack props, slots, and events", async () => {
+    const onStack = vi.fn()
+    const app = mount(
+      AdaptiveStack,
+      {
+        breakpoint: 720,
+        gap: 20,
+        align: "center",
+        justify: "space-between",
+        reverse: true,
+        onStack,
+      },
+      { default: () => h("article", "stack") },
+    )
+
+    const element = container.querySelector("adaptive-stack") as HTMLElement
+    await nextTick()
+    element.dispatchEvent(
+      new CustomEvent("stack", {
+        bubbles: true,
+        composed: true,
+        detail: { inlineSize: 600, mode: "column" },
+      }),
+    )
+
+    expect(element).toMatchObject({
+      align: "center",
+      breakpoint: 720,
+      gap: 20,
+      justify: "space-between",
+      reverse: true,
+    })
+    expect(element.textContent).toBe("stack")
+    expect(onStack).toHaveBeenCalledOnce()
+    app.unmount()
+  })
 
   it("maps AmbientImage props and events", async () => {
     const onAmbient = vi.fn()
@@ -95,6 +142,109 @@ describe("@layout-kit/vue", () => {
       variant: "fade",
     })
     expect(onAmbient).toHaveBeenCalledOnce()
+    app.unmount()
+  })
+
+  it("maps AspectBox props and slots", async () => {
+    const app = mount(
+      AspectBox,
+      { ratio: "4:3", fit: "contain", position: "top left" },
+      { default: () => h("img", { alt: "" }) },
+    )
+
+    const element = container.querySelector("aspect-box") as HTMLElement
+    await nextTick()
+
+    expect(element).toMatchObject({
+      fit: "contain",
+      position: "top left",
+      ratio: "4:3",
+    })
+    expect(element.querySelector("img")).not.toBeNull()
+    app.unmount()
+  })
+
+  it("maps CenterBox props and slots", async () => {
+    const app = mount(
+      CenterBox,
+      { maxWidth: "960px", padding: "24px", centerText: true },
+      { default: () => h("article", "center") },
+    )
+
+    const element = container.querySelector("center-box") as HTMLElement
+    await nextTick()
+
+    expect(element).toMatchObject({
+      centerText: true,
+      maxWidth: "960px",
+      padding: "24px",
+    })
+    expect(element.textContent).toBe("center")
+    app.unmount()
+  })
+
+  it("maps ClusterLayout props and slots", async () => {
+    const app = mount(
+      ClusterLayout,
+      { gap: 10, align: "baseline", justify: "space-between" },
+      { default: () => h("button", "Save") },
+    )
+
+    const element = container.querySelector("cluster-layout") as HTMLElement
+    await nextTick()
+
+    expect(element).toMatchObject({
+      align: "baseline",
+      gap: 10,
+      justify: "space-between",
+    })
+    expect(element.textContent).toBe("Save")
+    app.unmount()
+  })
+
+  it("maps CoverLayout props and slots", async () => {
+    const app = mount(
+      CoverLayout,
+      { minHeight: "480px", gap: 18, center: true },
+      {
+        default: () => [
+          h("header", { slot: "header" }, "header"),
+          h("main", "main"),
+          h("footer", { slot: "footer" }, "footer"),
+        ],
+      },
+    )
+
+    const element = container.querySelector("cover-layout") as HTMLElement
+    await nextTick()
+
+    expect(element).toMatchObject({
+      center: true,
+      gap: 18,
+      minHeight: "480px",
+    })
+    expect(element.querySelector('[slot="header"]')?.textContent).toBe("header")
+    expect(element.querySelector("main")?.textContent).toBe("main")
+    expect(element.querySelector('[slot="footer"]')?.textContent).toBe("footer")
+    app.unmount()
+  })
+
+  it("maps FlowStack props and slots", async () => {
+    const app = mount(
+      FlowStack,
+      { gap: 20, align: "center", justify: "space-between" },
+      { default: () => h("article", "flow") },
+    )
+
+    const element = container.querySelector("flow-stack") as HTMLElement
+    await nextTick()
+
+    expect(element).toMatchObject({
+      align: "center",
+      gap: 20,
+      justify: "space-between",
+    })
+    expect(element.textContent).toBe("flow")
     app.unmount()
   })
 
@@ -198,6 +348,34 @@ describe("@layout-kit/vue", () => {
     app.unmount()
   })
 
+  it("maps ReelLayout props, slots, and events", async () => {
+    const onReel = vi.fn()
+    const app = mount(
+      ReelLayout,
+      { gap: 14, itemWidth: "180px", snap: true, onReel },
+      { default: () => h("article", "card") },
+    )
+
+    const element = container.querySelector("reel-layout") as HTMLElement
+    await nextTick()
+    element.dispatchEvent(
+      new CustomEvent("reel", {
+        bubbles: true,
+        composed: true,
+        detail: { overflow: true, scrollLeft: 10 },
+      }),
+    )
+
+    expect(element).toMatchObject({
+      gap: 14,
+      itemWidth: "180px",
+      snap: true,
+    })
+    expect(element.textContent).toBe("card")
+    expect(onReel).toHaveBeenCalledOnce()
+    app.unmount()
+  })
+
   it("maps ResizablePanel props, named slots, and events", async () => {
     const onResize = vi.fn()
     const app = mount(
@@ -230,6 +408,103 @@ describe("@layout-kit/vue", () => {
     expect(element.querySelector('[slot="start"]')?.textContent).toBe("top")
     expect(element.querySelector('[slot="end"]')?.textContent).toBe("bottom")
     expect(onResize).toHaveBeenCalledOnce()
+    app.unmount()
+  })
+
+  it("maps ScrollShadow props, slots, and events", async () => {
+    const onOverflow = vi.fn()
+    const app = mount(
+      ScrollShadow,
+      {
+        direction: "both",
+        shadowSize: "32px",
+        shadowColor: "rgb(1 2 3 / 40%)",
+        onOverflow,
+      },
+      { default: () => h("article", "overflow") },
+    )
+
+    const element = container.querySelector("scroll-shadow") as HTMLElement
+    await nextTick()
+    element.dispatchEvent(
+      new CustomEvent("overflow", {
+        bubbles: true,
+        composed: true,
+        detail: { bottom: true, left: false, right: false, top: false },
+      }),
+    )
+
+    expect(element).toMatchObject({
+      direction: "both",
+      shadowColor: "rgb(1 2 3 / 40%)",
+      shadowSize: "32px",
+    })
+    expect(element.textContent).toBe("overflow")
+    expect(onOverflow).toHaveBeenCalledOnce()
+    app.unmount()
+  })
+
+  it("maps SidebarLayout props, slots, and events", async () => {
+    const onSidebar = vi.fn()
+    const app = mount(
+      SidebarLayout,
+      {
+        side: "right",
+        sidebarWidth: "220px",
+        gap: 18,
+        collapseAt: 640,
+        onSidebar,
+      },
+      {
+        default: () => [
+          h("aside", { slot: "sidebar" }, "sidebar"),
+          h("main", { slot: "content" }, "content"),
+        ],
+      },
+    )
+
+    const element = container.querySelector("sidebar-layout") as HTMLElement
+    await nextTick()
+    element.dispatchEvent(
+      new CustomEvent("sidebar", {
+        bubbles: true,
+        composed: true,
+        detail: { collapsed: true, inlineSize: 520 },
+      }),
+    )
+
+    expect(element).toMatchObject({
+      collapseAt: 640,
+      gap: 18,
+      side: "right",
+      sidebarWidth: "220px",
+    })
+    expect(element.querySelector('[slot="sidebar"]')?.textContent).toBe(
+      "sidebar",
+    )
+    expect(element.querySelector('[slot="content"]')?.textContent).toBe(
+      "content",
+    )
+    expect(onSidebar).toHaveBeenCalledOnce()
+    app.unmount()
+  })
+
+  it("maps StickyBox props and slots", async () => {
+    const app = mount(
+      StickyBox,
+      { offset: "16px", position: "bottom", zIndex: 20 },
+      { default: () => h("article", "sticky") },
+    )
+
+    const element = container.querySelector("sticky-box") as HTMLElement
+    await nextTick()
+
+    expect(element).toMatchObject({
+      offset: "16px",
+      position: "bottom",
+      zIndex: 20,
+    })
+    expect(element.textContent).toBe("sticky")
     app.unmount()
   })
 })
