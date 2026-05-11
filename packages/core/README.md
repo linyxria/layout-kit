@@ -33,7 +33,11 @@ Then use the elements directly:
   image-radius="12px"
 ></ambient-image>
 
-<screen-fit draft-width="1920" draft-height="1080">
+<screen-fit
+  draft-width="1920"
+  draft-height="1080"
+  backdrop-src="/dashboard-preview.png"
+>
   <main>Dashboard content</main>
 </screen-fit>
 ```
@@ -45,7 +49,8 @@ Then use the elements directly:
 - `virtual-list`: fixed-row virtualized list.
 - `resizable-panel`: two-pane draggable layout.
 - `ambient-image`: image preview with generated ambient backdrop.
-- `screen-fit`: fixed design canvas scaled into a fluid container.
+- `screen-fit`: fixed design canvas scaled into a fluid container, with an
+  optional ambient backdrop for letterbox space.
 
 ## Events
 
@@ -55,13 +60,13 @@ document.querySelector("screen-fit")?.addEventListener("scale", (event) => {
 })
 ```
 
-| Element | Event | Detail |
-| --- | --- | --- |
-| `auto-grid` | `grid` | `{ columns }` |
-| `masonry-layout` | `layout` | `{ columns, height }` |
-| `virtual-list` | `range` | `{ start, end }` |
-| `resizable-panel` | `resize` | `{ size }` |
-| `screen-fit` | `scale` | `{ scale, inlineSize, blockSize }` |
-| `ambient-image` | `ambient` | `{ color, inlineSize, blockSize }` |
+| Element           | Event     | Detail                             |
+| ----------------- | --------- | ---------------------------------- |
+| `auto-grid`       | `grid`    | `{ columns }`                      |
+| `masonry-layout`  | `layout`  | `{ columns, height }`              |
+| `virtual-list`    | `range`   | `{ start, end }`                   |
+| `resizable-panel` | `resize`  | `{ size }`                         |
+| `screen-fit`      | `scale`   | `{ scale, inlineSize, blockSize }` |
+| `ambient-image`   | `ambient` | `{ color, inlineSize, blockSize }` |
 
 See the repository README for full examples.

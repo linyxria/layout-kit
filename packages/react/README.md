@@ -33,11 +33,7 @@ export function Demo() {
         <article>Card B</article>
       </AutoGrid>
 
-      <AmbientImage
-        src="/banner.png"
-        alt="Event banner"
-        backdropBlur="32px"
-      />
+      <AmbientImage src="/banner.png" alt="Event banner" backdropBlur="32px" />
 
       <VirtualList
         height={320}
@@ -54,7 +50,11 @@ export function Demo() {
         <section slot="end">Preview</section>
       </ResizablePanel>
 
-      <ScreenFit draftWidth={1920} draftHeight={1080}>
+      <ScreenFit
+        draftWidth={1920}
+        draftHeight={1080}
+        backdropSrc="/dashboard-preview.png"
+      >
         <main>Dashboard content</main>
       </ScreenFit>
     </>

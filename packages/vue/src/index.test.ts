@@ -50,7 +50,11 @@ describe("@layout-kit/vue", () => {
     container.remove()
   })
 
-  function mount(component: unknown, props: Record<string, unknown>, slots = {}) {
+  function mount(
+    component: unknown,
+    props: Record<string, unknown>,
+    slots = {},
+  ) {
     const app = createApp({
       render: () => h(component, props, slots),
     })
@@ -273,6 +277,34 @@ describe("@layout-kit/vue", () => {
     })
     expect(element.textContent).toBe("screen")
     expect(onScale).toHaveBeenCalledOnce()
+    app.unmount()
+  })
+
+  it("maps ScreenFit backdrop props", async () => {
+    const app = mount(ScreenFit, {
+      draftWidth: 1920,
+      draftHeight: 1080,
+      backdropSrc: "/image.webp",
+      backdropBlur: "24px",
+      backdropScale: "1.2",
+      backdropOverlay: "rgb(0 0 0 / 40%)",
+      backgroundColor: "#123456",
+      autoColor: false,
+      crossOrigin: "anonymous",
+    })
+
+    const element = container.querySelector("screen-fit") as HTMLElement
+    await nextTick()
+
+    expect(element).toMatchObject({
+      autoColor: false,
+      backdropBlur: "24px",
+      backdropOverlay: "rgb(0 0 0 / 40%)",
+      backdropScale: "1.2",
+      backdropSrc: "/image.webp",
+      backgroundColor: "#123456",
+      crossOrigin: "anonymous",
+    })
     app.unmount()
   })
 

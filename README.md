@@ -301,6 +301,21 @@ fill the container and allow cropping:
 </screen-fit>
 ```
 
+For large-screen previews with mismatched container ratios, pass a backdrop
+source to fill the letterbox space with a blurred ambient image:
+
+```html
+<screen-fit
+  draft-width="1920"
+  draft-height="1080"
+  backdrop-src="/dashboard-preview.png"
+  backdrop-blur="40px"
+  backdrop-overlay="rgb(0 0 0 / 30%)"
+>
+  <main>Dashboard content</main>
+</screen-fit>
+```
+
 ## React
 
 ```tsx
@@ -380,11 +395,7 @@ export function Demo() {
         ))}
       </VirtualList>
 
-      <AmbientImage
-        src="/banner.png"
-        alt="Event banner"
-        backdropBlur="32px"
-      />
+      <AmbientImage src="/banner.png" alt="Event banner" backdropBlur="32px" />
 
       <AspectBox ratio="16:9">
         <img src="/preview.png" alt="Preview" />
@@ -408,7 +419,11 @@ export function Demo() {
         <nav>Actions</nav>
       </StickyBox>
 
-      <ScreenFit draftWidth={1920} draftHeight={1080}>
+      <ScreenFit
+        draftWidth={1920}
+        draftHeight={1080}
+        backdropSrc="/dashboard-preview.png"
+      >
         <main>Dashboard content</main>
       </ScreenFit>
     </>
@@ -493,11 +508,7 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
     <article v-for="row in rows" :key="row">{{ row }}</article>
   </VirtualList>
 
-  <AmbientImage
-    src="/banner.png"
-    alt="Event banner"
-    backdrop-blur="32px"
-  />
+  <AmbientImage src="/banner.png" alt="Event banner" backdrop-blur="32px" />
 
   <AspectBox ratio="16:9">
     <img src="/preview.png" alt="Preview" />
@@ -521,7 +532,11 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
     <nav>Actions</nav>
   </StickyBox>
 
-  <ScreenFit :draft-width="1920" :draft-height="1080">
+  <ScreenFit
+    :draft-width="1920"
+    :draft-height="1080"
+    backdrop-src="/dashboard-preview.png"
+  >
     <main>Dashboard content</main>
   </ScreenFit>
 </template>
@@ -531,18 +546,18 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
 
 All core elements dispatch native `CustomEvent` events:
 
-| Element | Event | Detail |
-| --- | --- | --- |
-| `adaptive-stack` | `stack` | `{ mode, inlineSize }` |
-| `auto-grid` | `grid` | `{ columns }` |
-| `masonry-layout` | `layout` | `{ columns, height }` |
-| `sidebar-layout` | `sidebar` | `{ collapsed, inlineSize }` |
-| `virtual-list` | `range` | `{ start, end }` |
-| `reel-layout` | `reel` | `{ overflow, scrollLeft }` |
-| `resizable-panel` | `resize` | `{ size }` |
-| `scroll-shadow` | `overflow` | `{ top, right, bottom, left }` |
-| `screen-fit` | `scale` | `{ scale, inlineSize, blockSize }` |
-| `ambient-image` | `ambient` | `{ color, inlineSize, blockSize }` |
+| Element           | Event      | Detail                             |
+| ----------------- | ---------- | ---------------------------------- |
+| `adaptive-stack`  | `stack`    | `{ mode, inlineSize }`             |
+| `auto-grid`       | `grid`     | `{ columns }`                      |
+| `masonry-layout`  | `layout`   | `{ columns, height }`              |
+| `sidebar-layout`  | `sidebar`  | `{ collapsed, inlineSize }`        |
+| `virtual-list`    | `range`    | `{ start, end }`                   |
+| `reel-layout`     | `reel`     | `{ overflow, scrollLeft }`         |
+| `resizable-panel` | `resize`   | `{ size }`                         |
+| `scroll-shadow`   | `overflow` | `{ top, right, bottom, left }`     |
+| `screen-fit`      | `scale`    | `{ scale, inlineSize, blockSize }` |
+| `ambient-image`   | `ambient`  | `{ color, inlineSize, blockSize }` |
 
 React wrappers expose `onAmbient`, `onGrid`, `onLayout`, `onOverflow`,
 `onRange`, `onReel`, `onResize`, `onScale`, `onSidebar`, and `onStack`. Vue

@@ -93,7 +93,9 @@ export const AspectBox = defineComponent({
   name: "AspectBox",
   props: {
     ratio: String,
-    fit: String as PropType<"contain" | "cover" | "fill" | "none" | "scale-down">,
+    fit: String as PropType<
+      "contain" | "cover" | "fill" | "none" | "scale-down"
+    >,
     position: String,
   },
   setup(props, { attrs, slots }) {
@@ -205,6 +207,13 @@ export const ScreenFit = defineComponent({
     draftWidth: Number,
     draftHeight: Number,
     fit: String as PropType<"contain" | "cover">,
+    backdropSrc: String,
+    backdropBlur: String,
+    backdropScale: String,
+    backdropOverlay: String,
+    backgroundColor: String,
+    autoColor: Boolean,
+    crossOrigin: String as PropType<"" | "anonymous" | "use-credentials">,
     onScale: Function as PropType<(event: CustomEvent<ScaleEventData>) => void>,
   },
   setup(props, { attrs, slots }) {
@@ -216,6 +225,13 @@ export const ScreenFit = defineComponent({
           "draft-width": props.draftWidth,
           "draft-height": props.draftHeight,
           fit: props.fit,
+          "backdrop-src": props.backdropSrc,
+          "backdrop-blur": props.backdropBlur,
+          "backdrop-scale": props.backdropScale,
+          "backdrop-overlay": props.backdropOverlay,
+          "background-color": props.backgroundColor,
+          "auto-color": props.autoColor,
+          "cross-origin": props.crossOrigin,
           onScale: props.onScale,
         },
         slots.default?.(),

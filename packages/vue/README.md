@@ -33,11 +33,7 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
     <article>Card B</article>
   </AutoGrid>
 
-  <AmbientImage
-    src="/banner.png"
-    alt="Event banner"
-    backdrop-blur="32px"
-  />
+  <AmbientImage src="/banner.png" alt="Event banner" backdrop-blur="32px" />
 
   <VirtualList
     :height="320"
@@ -52,7 +48,11 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
     <section slot="end">Preview</section>
   </ResizablePanel>
 
-  <ScreenFit :draft-width="1920" :draft-height="1080">
+  <ScreenFit
+    :draft-width="1920"
+    :draft-height="1080"
+    backdrop-src="/dashboard-preview.png"
+  >
     <main>Dashboard content</main>
   </ScreenFit>
 </template>

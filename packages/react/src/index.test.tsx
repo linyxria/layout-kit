@@ -274,7 +274,12 @@ describe("@layout-kit/react", () => {
   it("maps ScreenFit props and events", async () => {
     const onScale = vi.fn()
     await render(
-      <ScreenFit draftWidth={1920} draftHeight={1080} fit="cover" onScale={onScale}>
+      <ScreenFit
+        draftWidth={1920}
+        draftHeight={1080}
+        fit="cover"
+        onScale={onScale}
+      >
         <span>screen</span>
       </ScreenFit>,
     )
@@ -296,6 +301,34 @@ describe("@layout-kit/react", () => {
     })
     expect(element.textContent).toBe("screen")
     expect(onScale).toHaveBeenCalledOnce()
+  })
+
+  it("maps ScreenFit backdrop props", async () => {
+    await render(
+      <ScreenFit
+        draftWidth={1920}
+        draftHeight={1080}
+        backdropSrc="/image.webp"
+        backdropBlur="24px"
+        backdropScale="1.2"
+        backdropOverlay="rgb(0 0 0 / 40%)"
+        backgroundColor="#123456"
+        autoColor={false}
+        crossOrigin="anonymous"
+      />,
+    )
+
+    const element = await waitForElement("screen-fit")
+
+    expect(element).toMatchObject({
+      autoColor: false,
+      backdropBlur: "24px",
+      backdropOverlay: "rgb(0 0 0 / 40%)",
+      backdropScale: "1.2",
+      backdropSrc: "/image.webp",
+      backgroundColor: "#123456",
+      crossOrigin: "anonymous",
+    })
   })
 
   it("maps MasonryLayout props and events", async () => {
