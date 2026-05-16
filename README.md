@@ -163,15 +163,19 @@ Arranges uneven-height items into compact masonry columns.
 
 ### VirtualList
 
-Keeps long fixed-height lists responsive by only showing the items around the
-visible range.
+Keeps long fixed-height lists responsive by measuring the visible range and
+rendering only the items supplied by the framework wrapper.
 
 ```html
-<virtual-list height="320" item-height="48" overscan="4">
-  <article>Row 1</article>
-  <article>Row 2</article>
-  <article>Row 3</article>
+<virtual-list item-count="1000" height="320" item-height="48" overscan="4">
+  <!-- Render only the current range here. -->
 </virtual-list>
+```
+
+```ts
+document.querySelector("virtual-list")?.addEventListener("range", (event) => {
+  console.log(event.detail.start, event.detail.end)
+})
 ```
 
 ### ResizablePanel
@@ -242,6 +246,33 @@ previews.
   backdrop-blur="32px"
   background-color="#15110f"
 ></ambient-image>
+```
+
+Pass foreground media as children when another renderer should own the image
+element. This keeps framework image optimization pipelines, such as Next
+`Image`, in control of the foreground image:
+
+```tsx
+import Image from "next/image"
+import { AmbientImage } from "@layout-kit/react"
+
+export function Banner() {
+  return (
+    <AmbientImage src="/banner.png" alt="Event banner" fit="cover">
+      <Image src="/banner.png" alt="Event banner" fill sizes="100vw" />
+    </AmbientImage>
+  )
+}
+```
+
+Use the named `backdrop` slot when the decorative blurred backdrop should also
+be supplied by the host framework:
+
+```tsx
+<AmbientImage src="/banner.png" alt="Event banner" fit="cover">
+  <Image slot="backdrop" src="/banner.png" alt="" fill sizes="100vw" />
+  <Image src="/banner.png" alt="Event banner" fill sizes="100vw" />
+</AmbientImage>
 ```
 
 Use `variant="fade"` when you want the image edges to blend into the surrounding
@@ -389,11 +420,12 @@ export function Demo() {
         <footer slot="footer">Footer</footer>
       </CoverLayout>
 
-      <VirtualList height={320} itemHeight={48}>
-        {rows.map((row) => (
-          <article key={row}>{row}</article>
-        ))}
-      </VirtualList>
+      <VirtualList
+        height={320}
+        itemHeight={48}
+        items={rows}
+        renderItem={(row, index) => <article>{`${index + 1}. ${row}`}</article>}
+      />
 
       <AmbientImage src="/banner.png" alt="Event banner" backdropBlur="32px" />
 
@@ -504,9 +536,12 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
     <footer slot="footer">Footer</footer>
   </CoverLayout>
 
-  <VirtualList :height="320" :item-height="48">
-    <article v-for="row in rows" :key="row">{{ row }}</article>
-  </VirtualList>
+  <VirtualList
+    :height="320"
+    :item-height="48"
+    :items="rows"
+    :render-item="(row, index) => `${index + 1}. ${row}`"
+  />
 
   <AmbientImage src="/banner.png" alt="Event banner" backdrop-blur="32px" />
 

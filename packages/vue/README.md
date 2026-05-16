@@ -35,13 +35,17 @@ const rows = Array.from({ length: 1000 }, (_, index) => `Row ${index + 1}`)
 
   <AmbientImage src="/banner.png" alt="Event banner" backdrop-blur="32px" />
 
+  <AmbientImage src="/banner.png" alt="Event banner" fit="cover">
+    <img src="/banner.png" alt="Event banner" />
+  </AmbientImage>
+
   <VirtualList
     :height="320"
     :item-height="48"
+    :items="rows"
     :on-range="(event) => console.log(event.detail)"
-  >
-    <article v-for="row in rows" :key="row">{{ row }}</article>
-  </VirtualList>
+    :render-item="(row, index) => `${index + 1}. ${row}`"
+  />
 
   <ResizablePanel :size="40" :min="20" :max="80">
     <section slot="start">Navigation</section>

@@ -63,7 +63,8 @@ export class AmbientImage extends LitElement {
       pointer-events: none;
     }
 
-    .backdrop img {
+    .backdrop img,
+    ::slotted([slot="backdrop"]) {
       width: 100%;
       height: 100%;
       max-width: none;
@@ -79,15 +80,21 @@ export class AmbientImage extends LitElement {
       content: "";
     }
 
-    img {
+    img,
+    ::slotted(*) {
       display: block;
       max-width: 100%;
-      width: auto;
-      height: auto;
       border-radius: var(--ai-image-radius);
+      box-sizing: border-box;
     }
 
-    img.cover {
+    img {
+      width: auto;
+      height: auto;
+    }
+
+    img.cover,
+    ::slotted(.cover) {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -268,21 +275,26 @@ export class AmbientImage extends LitElement {
       ${this.variant === "blur"
         ? html`
             <div class="backdrop" aria-hidden="true">
-              <img
-                src=${this.src}
-                crossorigin=${this.crossOrigin ?? undefined}
-              />
+              <slot name="backdrop">
+                <img
+                  src=${this.src}
+                  crossorigin=${this.crossOrigin ?? undefined}
+                  alt=""
+                />
+              </slot>
             </div>
           `
         : null}
       <div class="media" style=${styleMap(mediaStyles)}>
-        <img
-          class=${this.fit}
-          src=${this.src}
-          alt=${this.alt}
-          crossorigin=${this.crossOrigin ?? undefined}
-          style=${styleMap(styles)}
-        />
+        <slot>
+          <img
+            class=${this.fit}
+            src=${this.src}
+            alt=${this.alt}
+            crossorigin=${this.crossOrigin ?? undefined}
+            style=${styleMap(styles)}
+          />
+        </slot>
         ${this.variant !== "fade" || this.fade === "none"
           ? null
           : html`<span

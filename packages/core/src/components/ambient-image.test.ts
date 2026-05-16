@@ -44,6 +44,48 @@ describe("ambient-image", () => {
     expect(element.style.getPropertyValue("--ai-scale")).toBe("1.2")
   })
 
+  it("uses slotted media instead of the fallback image when children are provided", async () => {
+    const element = document.createElement("ambient-image") as AmbientImage
+    const image = document.createElement("img")
+
+    element.src = "/image.webp"
+    element.alt = "Preview"
+    image.src = "/optimized.webp"
+    image.alt = "Optimized preview"
+    element.append(image)
+    document.body.append(element)
+
+    await element.updateComplete
+
+    const slot = element.shadowRoot?.querySelector(
+      ".media slot:not([name])",
+    ) as HTMLSlotElement
+    const fallbackImage = slot.querySelector("img")
+
+    expect(slot.assignedElements()).toEqual([image])
+    expect(fallbackImage?.getAttribute("src")).toBe("/image.webp")
+  })
+
+  it("allows the backdrop image to be provided through a named slot", async () => {
+    const element = document.createElement("ambient-image") as AmbientImage
+    const backdrop = document.createElement("img")
+
+    element.src = "/image.webp"
+    backdrop.slot = "backdrop"
+    backdrop.src = "/optimized-backdrop.webp"
+    backdrop.alt = ""
+    element.append(backdrop)
+    document.body.append(element)
+
+    await element.updateComplete
+
+    const slot = element.shadowRoot?.querySelector(
+      'slot[name="backdrop"]',
+    ) as HTMLSlotElement
+
+    expect(slot.assignedElements()).toEqual([backdrop])
+  })
+
   it("maps backdrop-blur attribute without supporting the native blur name", async () => {
     const element = document.createElement("ambient-image") as AmbientImage
 

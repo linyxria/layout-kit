@@ -15,6 +15,7 @@ import {
   SidebarLayout as SidebarLayoutElement,
   StickyBox as StickyBoxElement,
   VirtualList as VirtualListElement,
+  type VirtualListRangeEventData,
 } from "@layout-kit/core"
 import { createComponent } from "@lit/react"
 import React from "react"
@@ -94,14 +95,92 @@ export const AutoGrid = createComponent({
   },
 })
 
-export const VirtualList = createComponent({
-  tagName: "virtual-list",
-  elementClass: VirtualListElement,
-  react: React,
-  events: {
-    onRange: "range",
-  },
-})
+export interface VirtualListProps<T> extends Omit<
+  React.HTMLAttributes<VirtualListElement>,
+  "children"
+> {
+  height?: number
+  itemHeight?: number
+  items: readonly T[]
+  onRange?: (event: CustomEvent<VirtualListRangeEventData>) => void
+  overscan?: number
+  renderItem: (item: T, index: number) => React.ReactNode
+}
+
+export function VirtualList<T>({
+  height,
+  itemHeight = 48,
+  items,
+  onRange,
+  overscan,
+  renderItem,
+  style,
+  ...props
+}: VirtualListProps<T>) {
+  const elementRef = React.useRef<VirtualListElement | null>(null)
+  const [range, setRange] = React.useState<VirtualListRangeEventData>({
+    end: -1,
+    start: -1,
+  })
+
+  React.useLayoutEffect(() => {
+    const element = elementRef.current
+
+    if (!element) {
+      return
+    }
+
+    const handleRange = (event: Event) => {
+      const rangeEvent = event as CustomEvent<VirtualListRangeEventData>
+      setRange(rangeEvent.detail)
+      onRange?.(rangeEvent)
+    }
+
+    element.addEventListener("range", handleRange)
+
+    return () => element.removeEventListener("range", handleRange)
+  }, [onRange])
+
+  const safeItemHeight = Math.max(1, itemHeight)
+  const visibleItems =
+    range.start < 0 || range.end < 0
+      ? []
+      : items.slice(range.start, range.end + 1).map((item, offset) => ({
+          index: range.start + offset,
+          item,
+        }))
+
+  return React.createElement(
+    "virtual-list",
+    {
+      ...props,
+      height,
+      "item-count": items.length,
+      "item-height": itemHeight,
+      overscan,
+      ref: elementRef,
+      style,
+    },
+    visibleItems.map(({ item, index }) =>
+      React.createElement(
+        "div",
+        {
+          key: index,
+          style: {
+            boxSizing: "border-box",
+            height: `${safeItemHeight}px`,
+            left: 0,
+            overflow: "hidden",
+            position: "absolute",
+            right: 0,
+            transform: `translateY(${index * safeItemHeight}px)`,
+          },
+        },
+        renderItem(item, index),
+      ),
+    ),
+  )
+}
 
 export const ReelLayout = createComponent({
   tagName: "reel-layout",

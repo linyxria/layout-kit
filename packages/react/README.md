@@ -35,15 +35,21 @@ export function Demo() {
 
       <AmbientImage src="/banner.png" alt="Event banner" backdropBlur="32px" />
 
+      <AmbientImage src="/banner.png" alt="Event banner" fit="cover">
+        <img src="/banner.png" alt="Event banner" />
+      </AmbientImage>
+
       <VirtualList
         height={320}
         itemHeight={48}
+        items={rows}
         onRange={(event) => console.log(event.detail)}
-      >
-        {rows.map((row) => (
-          <article key={row}>{row}</article>
-        ))}
-      </VirtualList>
+        renderItem={(row, index) => (
+          <article>
+            {index + 1}. {row}
+          </article>
+        )}
+      />
 
       <ResizablePanel size={40} min={20} max={80}>
         <section slot="start">Navigation</section>

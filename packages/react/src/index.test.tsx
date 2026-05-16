@@ -182,6 +182,20 @@ describe("@layout-kit/react", () => {
     expect(onAmbient).toHaveBeenCalledOnce()
   })
 
+  it("passes AmbientImage children through for optimized media renderers", async () => {
+    await render(
+      <AmbientImage src="/image.webp" alt="Preview">
+        <img src="/optimized.webp" alt="Optimized preview" />
+      </AmbientImage>,
+    )
+
+    const element = await waitForElement("ambient-image")
+    const image = element.querySelector("img")
+
+    expect(image?.getAttribute("src")).toBe("/optimized.webp")
+    expect(image?.getAttribute("alt")).toBe("Optimized preview")
+  })
+
   it("maps AspectBox props and slots", async () => {
     await render(
       <AspectBox ratio="4:3" fit="contain" position="top left">
@@ -379,24 +393,39 @@ describe("@layout-kit/react", () => {
 
   it("maps VirtualList props and events", async () => {
     const onRange = vi.fn()
+    const rows = Array.from({ length: 10 }, (_, index) => `Row ${index}`)
+
     await render(
-      <VirtualList itemHeight={48} height={320} overscan={6} onRange={onRange}>
-        <div>row</div>
-      </VirtualList>,
+      <VirtualList
+        itemHeight={48}
+        height={320}
+        items={rows}
+        overscan={6}
+        onRange={onRange}
+        renderItem={(row, index) => (
+          <span>
+            {index}:{row}
+          </span>
+        )}
+      />,
     )
 
     const element = await waitForElement("virtual-list")
     onRange.mockClear()
-    element.dispatchEvent(
-      new CustomEvent("range", {
-        bubbles: true,
-        composed: true,
-        detail: { start: 1, end: 5 },
-      }),
-    )
+    await act(async () => {
+      element.dispatchEvent(
+        new CustomEvent("range", {
+          bubbles: true,
+          composed: true,
+          detail: { start: 1, end: 3 },
+        }),
+      )
+    })
 
     expect(element).toMatchObject({ height: 320, itemHeight: 48, overscan: 6 })
-    expect(element.textContent).toBe("row")
+    expect(element.getAttribute("item-count")).toBe("10")
+    expect(element.textContent).toBe("1:Row 12:Row 23:Row 3")
+    expect(element.children).toHaveLength(3)
     expect(onRange).toHaveBeenCalledOnce()
   })
 

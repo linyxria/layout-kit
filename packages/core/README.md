@@ -46,9 +46,10 @@ Then use the elements directly:
 
 - `auto-grid`: responsive container-aware grid.
 - `masonry-layout`: compact masonry flow for uneven-height items.
-- `virtual-list`: fixed-row virtualized list.
+- `virtual-list`: data-driven fixed-row virtualized list.
 - `resizable-panel`: two-pane draggable layout.
-- `ambient-image`: image preview with generated ambient backdrop.
+- `ambient-image`: image preview with generated ambient backdrop and slotted
+  foreground media support.
 - `screen-fit`: fixed design canvas scaled into a fluid container, with an
   optional ambient backdrop for letterbox space.
 

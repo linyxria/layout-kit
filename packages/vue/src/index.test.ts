@@ -149,6 +149,25 @@ describe("@layout-kit/vue", () => {
     app.unmount()
   })
 
+  it("passes AmbientImage slots through for optimized media renderers", async () => {
+    const app = mount(
+      AmbientImage,
+      { alt: "Preview", src: "/image.webp" },
+      {
+        default: () =>
+          h("img", { alt: "Optimized preview", src: "/optimized.webp" }),
+      },
+    )
+
+    const element = container.querySelector("ambient-image") as HTMLElement
+    await nextTick()
+    const image = element.querySelector("img")
+
+    expect(image?.getAttribute("src")).toBe("/optimized.webp")
+    expect(image?.getAttribute("alt")).toBe("Optimized preview")
+    app.unmount()
+  })
+
   it("maps AspectBox props and slots", async () => {
     const app = mount(
       AspectBox,
@@ -358,11 +377,15 @@ describe("@layout-kit/vue", () => {
 
   it("maps VirtualList props, slots, and events", async () => {
     const onRange = vi.fn()
-    const app = mount(
-      VirtualList,
-      { itemHeight: 48, height: 320, overscan: 6, onRange },
-      { default: () => h("div", "row") },
-    )
+    const rows = Array.from({ length: 10 }, (_, index) => `Row ${index}`)
+    const app = mount(VirtualList, {
+      height: 320,
+      itemHeight: 48,
+      items: rows,
+      onRange,
+      overscan: 6,
+      renderItem: (row: unknown, index: number) => h("span", `${index}:${row}`),
+    })
 
     const element = container.querySelector("virtual-list") as HTMLElement
     await nextTick()
@@ -370,12 +393,15 @@ describe("@layout-kit/vue", () => {
       new CustomEvent("range", {
         bubbles: true,
         composed: true,
-        detail: { start: 1, end: 5 },
+        detail: { start: 1, end: 3 },
       }),
     )
+    await nextTick()
 
     expect(element).toMatchObject({ height: 320, itemHeight: 48, overscan: 6 })
-    expect(element.textContent).toBe("row")
+    expect(element.getAttribute("item-count")).toBe("10")
+    expect(element.textContent).toBe("1:Row 12:Row 23:Row 3")
+    expect(element.children).toHaveLength(3)
     expect(onRange).toHaveBeenCalledOnce()
     app.unmount()
   })

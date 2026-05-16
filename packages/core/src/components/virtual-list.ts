@@ -1,5 +1,5 @@
 import { css, html, LitElement } from "lit"
-import { customElement, property, query } from "lit/decorators.js"
+import { customElement, property } from "lit/decorators.js"
 
 export interface VirtualListRangeEventData {
   end: number
@@ -23,6 +23,7 @@ export class VirtualList extends LitElement {
       min-height: 100%;
     }
 
+    .item,
     ::slotted(*) {
       position: absolute;
       left: 0;
@@ -30,10 +31,6 @@ export class VirtualList extends LitElement {
       box-sizing: border-box;
       height: var(--vl-item-height, 48px);
       overflow: hidden;
-    }
-
-    slot {
-      display: contents;
     }
   `
 
@@ -46,8 +43,8 @@ export class VirtualList extends LitElement {
   @property({ type: Number })
   overscan = 4
 
-  @query("slot")
-  private slotElement!: HTMLSlotElement
+  @property({ type: Number, attribute: "item-count" })
+  itemCount = 0
 
   private range: VirtualListRangeEventData = { start: -1, end: -1 }
   private frameId = 0
@@ -74,6 +71,7 @@ export class VirtualList extends LitElement {
   protected updated(changedProperties: Map<string, unknown>) {
     if (
       changedProperties.has("height") ||
+      changedProperties.has("itemCount") ||
       changedProperties.has("itemHeight") ||
       changedProperties.has("overscan")
     ) {
@@ -83,10 +81,6 @@ export class VirtualList extends LitElement {
   }
 
   private handleScroll = () => this.scheduleLayout()
-
-  private handleSlotChange() {
-    this.scheduleLayout()
-  }
 
   private updateListProperties() {
     this.style.setProperty("--vl-height", `${Math.max(1, this.height)}px`)
@@ -102,41 +96,44 @@ export class VirtualList extends LitElement {
   }
 
   private layoutItems() {
-    const items = this.getItems()
+    const totalItems = this.getItemCount()
     const safeItemHeight = Math.max(1, this.itemHeight)
     const safeOverscan = Math.max(0, this.overscan)
 
-    if (items.length === 0) {
+    if (totalItems === 0) {
       this.style.setProperty("--vl-total-height", "0px")
       this.updateRange({ start: -1, end: -1 })
       return
     }
 
-    const visibleCount = Math.ceil(this.clientHeight / safeItemHeight)
-    const start = Math.max(
-      0,
-      Math.floor(this.scrollTop / safeItemHeight) - safeOverscan,
+    const firstVisible = Math.floor(this.scrollTop / safeItemHeight)
+    const lastVisible = Math.ceil(
+      (this.scrollTop + this.clientHeight) / safeItemHeight,
     )
+    const start = Math.max(0, firstVisible - safeOverscan)
     const end = Math.min(
-      items.length - 1,
-      start + visibleCount + safeOverscan * 2,
+      totalItems - 1,
+      Math.max(start, lastVisible + safeOverscan - 1),
     )
 
     this.style.setProperty(
       "--vl-total-height",
-      `${items.length * safeItemHeight}px`,
+      `${totalItems * safeItemHeight}px`,
     )
 
-    for (const [index, item] of items.entries()) {
-      const isVisible = index >= start && index <= end
-      item.hidden = !isVisible
-
-      if (isVisible) {
-        item.style.transform = `translateY(${index * safeItemHeight}px)`
-      }
-    }
-
     this.updateRange({ start, end })
+  }
+
+  private getItemCount() {
+    return Math.max(0, this.itemCount)
+  }
+
+  render() {
+    return html`
+      <div class="spacer" style="height: var(--vl-total-height, 0px)">
+        <slot></slot>
+      </div>
+    `
   }
 
   private updateRange(range: VirtualListRangeEventData) {
@@ -152,23 +149,5 @@ export class VirtualList extends LitElement {
         composed: true,
       }),
     )
-  }
-
-  private getItems() {
-    return this.slotElement
-      ? this.slotElement
-          .assignedElements({ flatten: true })
-          .filter(
-            (element): element is HTMLElement => element instanceof HTMLElement,
-          )
-      : []
-  }
-
-  render() {
-    return html`
-      <div class="spacer" style="height: var(--vl-total-height, 0px)">
-        <slot @slotchange=${this.handleSlotChange}></slot>
-      </div>
-    `
   }
 }

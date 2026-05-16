@@ -12,8 +12,8 @@ import type {
   SidebarLayoutEventData,
   VirtualListRangeEventData,
 } from "@layout-kit/core"
-import type { PropType } from "vue"
-import { defineComponent, h } from "vue"
+import type { PropType, VNodeChild } from "vue"
+import { defineComponent, h, ref } from "vue"
 
 export const AdaptiveStack = defineComponent({
   name: "AdaptiveStack",
@@ -66,26 +66,30 @@ export const AmbientImage = defineComponent({
       (event: CustomEvent<AmbientImageEventData>) => void
     >,
   },
-  setup(props, { attrs }) {
+  setup(props, { attrs, slots }) {
     return () =>
-      h("ambient-image", {
-        ...attrs,
-        src: props.src,
-        alt: props.alt,
-        fit: props.fit,
-        variant: props.variant,
-        fade: props.fade,
-        "fade-size": props.fadeSize,
-        "backdrop-blur": props.backdropBlur,
-        "image-radius": props.imageRadius,
-        "overlay-color": props.overlayColor,
-        padding: props.padding,
-        "backdrop-scale": props.backdropScale,
-        "background-color": props.backgroundColor,
-        "auto-color": props.autoColor,
-        "cross-origin": props.crossOrigin,
-        onAmbient: props.onAmbient,
-      })
+      h(
+        "ambient-image",
+        {
+          ...attrs,
+          src: props.src,
+          alt: props.alt,
+          fit: props.fit,
+          variant: props.variant,
+          fade: props.fade,
+          "fade-size": props.fadeSize,
+          "backdrop-blur": props.backdropBlur,
+          "image-radius": props.imageRadius,
+          "overlay-color": props.overlayColor,
+          padding: props.padding,
+          "backdrop-scale": props.backdropScale,
+          "background-color": props.backgroundColor,
+          "auto-color": props.autoColor,
+          "cross-origin": props.crossOrigin,
+          onAmbient: props.onAmbient,
+        },
+        slots.default?.(),
+      )
   },
 })
 
@@ -292,24 +296,70 @@ export const VirtualList = defineComponent({
   props: {
     itemHeight: Number,
     height: Number,
+    items: {
+      default: () => [],
+      type: Array as PropType<readonly unknown[]>,
+    },
     overscan: Number,
+    renderItem: Function as PropType<
+      (item: unknown, index: number) => VNodeChild
+    >,
     onRange: Function as PropType<
       (event: CustomEvent<VirtualListRangeEventData>) => void
     >,
   },
-  setup(props, { attrs, slots }) {
-    return () =>
-      h(
+  setup(props, { attrs }) {
+    const range = ref<VirtualListRangeEventData>({ end: -1, start: -1 })
+
+    const handleRange = (event: CustomEvent<VirtualListRangeEventData>) => {
+      range.value = event.detail
+      props.onRange?.(event)
+    }
+
+    return () => {
+      const safeItemHeight = Math.max(1, props.itemHeight ?? 48)
+      const visibleItems =
+        range.value.start < 0 || range.value.end < 0
+          ? []
+          : props.items
+              .slice(range.value.start, range.value.end + 1)
+              .map((item, offset) => ({
+                index: range.value.start + offset,
+                item,
+              }))
+
+      return h(
         "virtual-list",
         {
           ...attrs,
+          "item-count": props.items.length,
           "item-height": props.itemHeight,
           height: props.height,
           overscan: props.overscan,
-          onRange: props.onRange,
+          onRange: handleRange,
         },
-        slots.default?.(),
+        visibleItems.map(({ item, index }) => {
+          const child = props.renderItem?.(item, index)
+
+          return h(
+            "div",
+            {
+              key: index,
+              style: {
+                boxSizing: "border-box",
+                height: `${safeItemHeight}px`,
+                left: 0,
+                overflow: "hidden",
+                position: "absolute",
+                right: 0,
+                transform: `translateY(${index * safeItemHeight}px)`,
+              },
+            },
+            child == null ? [] : [child],
+          )
+        }),
       )
+    }
   },
 })
 
